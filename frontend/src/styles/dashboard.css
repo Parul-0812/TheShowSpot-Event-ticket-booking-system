@@ -1,0 +1,117 @@
+.dashboard{
+
+    min-height:100vh;
+
+    padding:40px;
+
+    background:#f5f5f5;
+
+}
+
+
+.dashboard h1{
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}
+
+
+.dashboard h2{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+
+.booking-list{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,300px);
+
+    justify-content:center;
+
+    gap:25px;
+
+}
+
+
+.admin-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    box-shadow:
+    0px 5px 15px rgba(0,0,0,0.15);
+
+}
+
+
+.admin-card p{
+
+    margin:10px 0;
+
+}
+
+
+.valid{
+
+    color:green;
+
+    font-weight:bold;
+
+}
+.verify-box{
+
+    background:white;
+
+    width:400px;
+
+    margin:30px auto;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    box-shadow:
+    0px 5px 15px rgba(0,0,0,0.15);
+
+}
+
+
+.verify-box input{
+
+    width:90%;
+
+    padding:12px;
+
+    margin:15px;
+
+}
+
+
+.verify-box button{
+
+    padding:12px 25px;
+
+    background:#ff4b5c;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}

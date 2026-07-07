@@ -1,0 +1,29 @@
+.notification-page{
+
+min-height:100vh;
+
+padding:50px;
+
+background:#f5f5f5;
+
+text-align:center;
+
+}
+
+
+.notification-card{
+
+background:white;
+
+width:450px;
+
+margin:20px auto;
+
+padding:25px;
+
+border-radius:15px;
+
+box-shadow:
+0 5px 15px rgba(0,0,0,0.15);
+
+}
