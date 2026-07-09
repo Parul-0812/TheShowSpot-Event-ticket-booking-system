@@ -2,10 +2,13 @@ const mongoose = require("mongoose");
 
 
 const bookingSchema = new mongoose.Schema({
+    user:{
+    type:String
+},
 
-    userName:{
-        type:String
-    },
+    // userName:{
+    //     type:String
+    // },
 
     eventName:{
         type:String
@@ -30,7 +33,9 @@ const bookingSchema = new mongoose.Schema({
     type:String,
     default:"Valid"
 }
-
+},
+{
+    timestamps:true
 });
 
 

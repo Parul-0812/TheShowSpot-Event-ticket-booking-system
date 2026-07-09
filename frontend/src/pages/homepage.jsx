@@ -37,70 +37,61 @@ showCity &&
             <h3>Popular Cities</h3>
 
             <div className="city-list">
-
                 <div 
 className="city"
 
 onClick={()=>{
 
-setCity("Mumbai");
+setCity("Select City");
+
+localStorage.removeItem("city");
 
 setShowCity(false);
 
 }}
 
 >
+<img src="/images/all cities.png" alt="All Cities"/>
+<p>All Cities</p>
+
+</div>
+
+                <div className="city" onClick={()=>{setCity("Mumbai"); localStorage.setItem("city","Mumbai"); setShowCity(false);}}>
                     <img src="/images/bombay.png" alt="Mumbai"/>
                     <p>Mumbai</p>
                 </div>
 
-                <div 
-className="city"
-
-onClick={()=>{
-
-setCity("New Delhi");
-
-setShowCity(false);
-
-}}
-
->
+                <div className="city" onClick={()=>{setCity("Delhi"); localStorage.setItem("city","Delhi"); setShowCity(false);}}>
                     <img src="/images/new delhi.png" alt="New Delhi"/>
                     <p>New Delhi</p>
                 </div>
 
-                <div className="city" onClick={()=>{setCity("Hyderabad"); setShowCity(false);}}>
+                <div className="city" onClick={()=>{setCity("Hyderabad"); localStorage.setItem("city","Hyderabad"); setShowCity(false);}}>
                     <img src="/images/hyderabad-charminar.png" alt="Hyderabad"/>
                     <p>Hyderabad</p>
                 </div>
 
-                <div className="city" onClick={()=>{setCity("Kolkata"); setShowCity(false);}}>
+                <div className="city" onClick={()=>{setCity("Kolkata"); localStorage.setItem("city","Kolkata"); setShowCity(false);}}>
                     <img src="/images/kolkata.png" alt="Kolkata"/>
                     <p>Kolkata</p>
                 </div>
 
-                <div className="city" onClick={()=>{setCity("Pune"); setShowCity(false);}}>
-                    <img src="/images/pune.png" alt="Pune"/>
-                    <p>Pune</p>
-                </div>
 
-                <div className="city" onClick={()=>{setCity("Shimla"); setShowCity(false);}}>
+                <div className="city" onClick={()=>{setCity("Shimla"); localStorage.setItem("city","Shimla"); setShowCity(false);}}>
                     <img src="/images/shimla.png" alt="Shimla"/>
                     <p>Shimla</p>
                 </div>
 
-                <div className="city" onClick={()=>{setCity("Chandigarh"); setShowCity(false);}}>
+                <div className="city" onClick={()=>{setCity("Chandigarh"); localStorage.setItem("city","Chandigarh"); setShowCity(false);}}>
                     <img src="/images/chandigarh.png" alt="Chandigarh"/>
                     <p>Chandigarh</p>
                 </div>
-
-                <div className="city" onClick={()=>{setCity("Jalandhar"); setShowCity(false);}}>
-                    <img src="/images/jalandhar.png" alt="Jalandhar"/>
-                    <p>Jalandhar</p>
+                <div className="city" onClick={()=>{setCity("Shillong"); localStorage.setItem("city","Shillong"); setShowCity(false);}}>
+                    <img src="/images/shillong.png" alt="Shillong"/>
+                    <p>Shillong</p>
                 </div>
 
-                <div className="city" onClick={()=>{setCity("Gangtok"); setShowCity(false);}}>
+                <div className="city" onClick={()=>{setCity("Gangtok"); localStorage.setItem("city","Gangtok"); setShowCity(false);}}>
                     <img src="/images/gangtok.png" alt="Gangtok"/>
                     <p>Gangtok</p>
                 </div>
@@ -122,11 +113,7 @@ setShowCity(false);
 </Link>
 
 
-        <div className="search-box">
-
-            <input type="text" placeholder="Search events, venues, artists..."/>
-
-        </div>
+        
 
         <div className="nav-right">
 
@@ -195,15 +182,13 @@ Login
     </nav>
 
     <div className="category-bar">
-
+    <Link to="/events">Movies</Link>
 
     <Link to="/events">Concerts</Link>
 
     <Link to="/events">Comedy</Link>
 
     <Link to="/events">Sports</Link>
-
-    <Link to="/events">Festivals</Link>
 
     <Link to="/events">Workshops</Link>
 
@@ -283,15 +268,28 @@ Login
             <h4>₹799</h4>
 
 
-            <a href="event-details.html">
+            <Link
+to="/eventDetails"
+state={{
+ event:{
+   image:"/images/music night.webp",
+   name:"Music Night Live",
+   category:"Concert",
+   location:"Chandigarh",
+   date:"20 July 2026",
+   time:"8 PM",
+   price:"₹799"
+ }
+}}
+>
 
-    <button>
+<button>
 
-        Book Now
+Book Now
 
-    </button>
+</button>
 
-</a>
+</Link>
 
 
         </div>
@@ -319,13 +317,26 @@ Login
             <h4>₹499</h4>
 
 
-            <Link to="event-details.html">
+            <Link
+to="/eventDetails"
+state={{
+ event:{
+   image:"/images/standup.jpg",
+   name:"Stand Up Evening",
+   category:"Comedy",
+   location:"Delhi",
+   date:"25 July 2026",
+   time:"8 PM",
+   price:"₹499"
+ }
+}}
+>
 
-    <button>
+<button>
 
-        Book Now
+Book Now
 
-    </button>
+</button>
 
 </Link>
 
@@ -347,7 +358,7 @@ Login
 
             <p>Workshop</p>
 
-            <p>📍 Bangalore</p>
+            <p>📍 Mumbai</p>
 
             <p>📅 1 August 2026</p>
 
@@ -355,13 +366,26 @@ Login
             <h4>₹299</h4>
 
 
-            <Link to="event-details.html">
+            <Link
+to="/eventDetails"
+state={{
+ event:{
+   image:"/images/workshop.jpg",
+   name:"Web Development Workshop",
+   category:"Workshop",
+   location:"Mumbai",
+   date:"1 August 2026",
+   time:"10 AM",
+   price:"₹299"
+ }
+}}
+>
 
-    <button>
+<button>
 
-        Book Now
+Book Now
 
-    </button>
+</button>
 
 </Link>
 
@@ -448,7 +472,7 @@ Login
         {/* <!-- QR Pass --> */}
 
 
-        <Link to="/ticket" className="step-card">
+        <Link to="/myBookings" className="step-card">
 
 
             <h1>📱</h1>
@@ -516,7 +540,7 @@ Login
                 Events
             </Link>
 
-            <Link to="/ticket" className="footer-link">
+            <Link to="/myBookings" className="footer-link">
                 My Tickets
             </Link>
 
@@ -537,19 +561,19 @@ Login
             <h3>Categories</h3>
 
 
-            <Link to="/categories/concerts" className="footer-link">
+            <Link to="/events#concerts" className="footer-link">
                 Concerts
             </Link>
 
-            <Link to="/categories/comedy" className="footer-link">
+            <Link to="/events#comedy" className="footer-link">
                 Comedy
             </Link>
 
-            <Link to="/categories/sports" className="footer-link">
+            <Link to="/events#sports" className="footer-link">
                 Sports
             </Link>
 
-            <Link to="/categories/workshops" className="footer-link">
+            <Link to="/events#workshops" className="footer-link">
                 Workshops
             </Link>
 

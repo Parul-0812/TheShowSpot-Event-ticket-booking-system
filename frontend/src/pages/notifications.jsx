@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from "react";
 import axios from "axios";
 import "../styles/notifications.css";
-
+import { Link } from "react-router-dom";
 
 function Notifications(){
 
@@ -66,7 +66,34 @@ Seats: {item.seats.join(", ")}
 <p>
 Amount Paid: ₹{item.amount}
 </p>
+<Link
+to="/ticket"
+state={{
 
+eventName:item.eventName,
+
+eventDate:item.eventDate,
+
+eventLocation:item.eventLocation,
+
+seats:item.seats,
+
+amount:item.amount,
+
+ticketId:item._id
+
+}}
+>
+
+
+<button className="download-ticket-btn">
+
+View / Download Ticket 🎟️
+
+</button>
+
+
+</Link>
 
 </div>
 

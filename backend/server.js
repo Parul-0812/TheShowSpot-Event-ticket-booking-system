@@ -4,12 +4,14 @@ const cors = require("cors");
 const userApi = require("./api/user");
 const app = express();
 const bookingApi = require("./api/booking");
+const eventRoute = require("./api/events");
 
 // middleware
 app.use(express.json());
 app.use(cors());
 app.use("/user", userApi);
 app.use("/booking", bookingApi);
+app.use("/events",eventRoute);
 
 // connect database
 mongoose.connect("mongodb://127.0.0.1:27017/TheShowSpot")

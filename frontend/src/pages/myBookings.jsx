@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from "react";
 import axios from "axios";
 import "../styles/myBookings.css";
-
+import { QRCodeCanvas } from "qrcode.react";
 
 function MyBookings(){
 
@@ -66,6 +66,32 @@ Seats: {ticket.seats.join(", ")}
 
 <p>
 Amount Paid: ₹{ticket.amount}
+</p>
+
+
+<div className="qr-box">
+
+
+<QRCodeCanvas
+
+value={ticket._id}
+
+size={120}
+
+/>
+
+
+</div>
+
+
+<p className="ticket-id">
+
+Ticket ID:
+
+<br/>
+
+{ticket._id}
+
 </p>
 
 

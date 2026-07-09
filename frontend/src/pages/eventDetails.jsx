@@ -23,8 +23,13 @@ console.log("EVENT DATA:", event);
 
         <div className="details-container">
 
-        <button onClick={()=>navigate(-1)}>
-    Back
+        <button 
+className="back-btn"
+onClick={()=>navigate(-1)}
+>
+
+← Back
+
 </button>
             <div className="details-card">
 
@@ -54,7 +59,7 @@ console.log("EVENT DATA:", event);
 
 
                     <h2>
-                        ₹{event.price}
+                        {event.price}
                     </h2>
 
 

@@ -16,42 +16,52 @@ const booking = location.state;
 
 
 const [method,setMethod]=useState("UPI");
-
+const [processing,setProcessing] = useState(false);
 
 const makePayment = async()=>{
 
 
-    const result = await axios.post(
-        "http://localhost:5000/booking/confirm",
-        booking
-    );
+setProcessing(true);
 
 
-    alert("Payment Successful ✅");
+setTimeout(async()=>{
 
 
-    navigate("/ticket",{
+const result = await axios.post(
+"http://localhost:5000/booking/confirm",
+booking
+);
 
-        state:{
 
-            eventName:booking.eventName,
+alert("Payment Successful ✅");
 
-            eventDate:booking.eventDate,
 
-            eventLocation:booking.eventLocation,
+navigate("/ticket",{
 
-            seats:booking.seats,
+state:{
 
-            amount:booking.amount,
+eventName:booking.eventName,
 
-            ticketId:result.data.ticketId
+eventDate:booking.eventDate,
 
-        }
+eventLocation:booking.eventLocation,
 
-    });
+seats:booking.seats,
+
+amount:booking.amount,
+
+ticketId:result.data.ticketId
+
+}
+
+});
+
+
+},1500);
 
 
 }
+
 
 
 return(
@@ -62,44 +72,150 @@ return(
 <div className="payment-card">
 
 
-<h1>💳 Payment</h1>
+<h1>Checkout 🎟️</h1>
+
+
+<div className="summary-box">
 
 
 <h2>
-Amount: ₹{booking.amount}
+{booking.eventName}
 </h2>
 
 
-<select
+<p>
+📍 {booking.eventLocation}
+</p>
 
-value={method}
 
-onChange={(e)=>setMethod(e.target.value)}
+<p>
+📅 {booking.eventDate}
+</p>
 
+
+<p>
+💺 Seats: {booking.seats.join(", ")}
+</p>
+
+
+</div>
+
+
+
+<div className="amount-box">
+
+
+<h3>Payment Summary</h3>
+
+
+<p>
+Ticket Amount: ₹{booking.amount}
+</p>
+
+
+<p>
+Convenience Fee: ₹20
+</p>
+
+
+<h2>
+Total: ₹{booking.amount+20}
+</h2>
+
+
+</div>
+
+
+
+
+<h3>Select Payment Method</h3>
+
+
+<div className="payment-options">
+
+
+<label>
+
+<input
+
+type="radio"
+
+checked={method==="UPI"}
+
+onChange={()=>setMethod("UPI")}
+
+/>
+
+UPI
+
+</label>
+
+
+
+<label>
+
+<input
+
+type="radio"
+
+checked={method==="Card"}
+
+onChange={()=>setMethod("Card")}
+
+/>
+
+Card
+
+</label>
+
+
+
+
+<label>
+
+<input
+
+type="radio"
+
+checked={method==="Net Banking"}
+
+onChange={()=>setMethod("Net Banking")}
+
+/>
+
+Net Banking
+
+</label>
+
+
+</div>
+
+
+
+
+<button 
+onClick={makePayment}
+disabled={processing}
 >
 
-<option>UPI</option>
 
-<option>Credit Card</option>
+{
+processing
+?
+"Processing..."
+:
+"Complete Payment"
+}
 
-<option>Debit Card</option>
-
-</select>
-
-
-
-<button onClick={makePayment}>
-
-Pay Now
 
 </button>
 
 
-</div>
-
 
 </div>
 
+
+</div>
 
 )
 

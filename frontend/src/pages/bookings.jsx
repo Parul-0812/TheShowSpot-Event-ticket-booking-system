@@ -10,6 +10,7 @@ function Bookings(){
     const navigate = useNavigate();
 
     const event = location.state?.event;
+    const basePrice = event ? Number(event.price.replace("₹","")):0;
 
     const [selectedSeats,setSelectedSeats] = useState([]);
     console.log("Selected:", selectedSeats);
@@ -17,26 +18,26 @@ function Bookings(){
 
     const seats = [
 
-    {id:"A1", type:"Premium", price:500},
-    {id:"A2", type:"Premium", price:500},
-    {id:"A3", type:"Premium", price:500},
-    {id:"A4", type:"Premium", price:500},
-    {id:"A5", type:"Premium", price:500},
-    {id:"A6", type:"Premium", price:500},
+    {id:"A1", type:"Premium", price:basePrice+200},
+    {id:"A2", type:"Premium", price:basePrice+200},
+    {id:"A3", type:"Premium", price:basePrice+200},
+    {id:"A4", type:"Premium", price:basePrice+200},
+    {id:"A5", type:"Premium", price:basePrice+200},
+    {id:"A6", type:"Premium", price:basePrice+200},
 
-    {id:"B1", type:"Gold", price:350},
-    {id:"B2", type:"Gold", price:350},
-    {id:"B3", type:"Gold", price:350},
-    {id:"B4", type:"Gold", price:350},
-    {id:"B5", type:"Gold", price:350},
-    {id:"B6", type:"Gold", price:350},
+    {id:"B1", type:"Gold", price:basePrice+100},
+    {id:"B2", type:"Gold", price:basePrice+100},
+    {id:"B3", type:"Gold", price:basePrice+100},
+    {id:"B4", type:"Gold", price:basePrice+100},
+    {id:"B5", type:"Gold", price:basePrice+100},
+    {id:"B6", type:"Gold", price:basePrice+100},
 
-    {id:"C1", type:"Silver", price:200},
-    {id:"C2", type:"Silver", price:200},
-    {id:"C3", type:"Silver", price:200},
-    {id:"C4", type:"Silver", price:200},
-    {id:"C5", type:"Silver", price:200},
-    {id:"C6", type:"Silver", price:200}
+    {id:"C1", type:"Silver", price:basePrice},
+    {id:"C2", type:"Silver", price:basePrice},
+    {id:"C3", type:"Silver", price:basePrice},
+    {id:"C4", type:"Silver", price:basePrice},
+    {id:"C5", type:"Silver", price:basePrice},
+    {id:"C6", type:"Silver", price:basePrice}
 
 ];
 useEffect(()=>{
@@ -188,8 +189,8 @@ user:"Parul"
 
 
                 <h3>
-                    Ticket Price: {event.price}
-                </h3>
+Starting From: {event.price}
+</h3>
 
 
 
@@ -254,11 +255,19 @@ onClick={()=>selectSeat(seat)}
 
 <div className="seat-info">
 
-<p>Silver: ₹200</p>
+<p>
+Silver: ₹{basePrice}
+</p>
 
-<p>Gold: ₹350</p>
 
-<p>Premium: ₹500</p>
+<p>
+Gold: ₹{basePrice+100}
+</p>
+
+
+<p>
+Premium: ₹{basePrice+200}
+</p>
 
 </div>
 

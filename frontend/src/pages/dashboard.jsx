@@ -10,6 +10,32 @@ function Dashboard(){
     const [ticketId,setTicketId] = useState("");
 
 const [message,setMessage] = useState("");
+const totalRevenue = bookings.reduce(
+(sum,item)=>sum+item.amount,
+0
+);
+
+
+const bookedSeats = bookings.reduce(
+(total,item)=>total+item.seats.length,
+0
+);
+
+
+const totalSeats = 180;
+
+
+const availableSeats = totalSeats - bookedSeats;
+
+
+const validTickets = bookings.filter(
+item=>item.ticketStatus==="Valid"
+).length;
+
+
+const usedTickets = bookings.filter(
+item=>item.ticketStatus==="Used"
+).length;
 
 
     useEffect(()=>{
@@ -69,9 +95,69 @@ return(
 <h1>Admin Dashboard</h1>
 
 
-<h2>
-Total Bookings: {bookings.length}
-</h2>
+<div className="dashboard-stats">
+
+
+<div className="stat-card">
+
+<h3>Total Bookings</h3>
+
+<h1>{bookings.length}</h1>
+
+</div>
+
+
+
+<div className="stat-card">
+
+<h3>Total Revenue</h3>
+
+<h1>₹{totalRevenue}</h1>
+
+</div>
+
+
+
+<div className="stat-card">
+
+<h3>Booked Seats</h3>
+
+<h1>{bookedSeats}</h1>
+
+</div>
+
+
+
+<div className="stat-card">
+
+<h3>Available Seats</h3>
+
+<h1>{availableSeats}</h1>
+
+</div>
+
+
+
+<div className="stat-card">
+
+<h3>Valid Tickets</h3>
+
+<h1>{validTickets}</h1>
+
+</div>
+
+
+
+<div className="stat-card">
+
+<h3>Used Tickets</h3>
+
+<h1>{usedTickets}</h1>
+
+</div>
+
+
+</div>
 
 <div className="verify-box">
 
@@ -125,7 +211,7 @@ bookings.map((booking)=>(
 
 
 <p>
-User: {booking.userName}
+User: {booking.user}
 </p>
 
 
