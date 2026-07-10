@@ -182,15 +182,15 @@ Login
     </nav>
 
     <div className="category-bar">
-    <Link to="/events">Movies</Link>
+    <Link to="/events#movies">Movies</Link>
 
-    <Link to="/events">Concerts</Link>
+    <Link to="/events#concerts">Concerts</Link>
 
-    <Link to="/events">Comedy</Link>
+    <Link to="/events#shows">Shows</Link>
 
-    <Link to="/events">Sports</Link>
+    <Link to="/events#sports">Sports</Link>
 
-    <Link to="/events">Workshops</Link>
+    <Link to="/events#workshops">Workshops</Link>
 
 
 </div>
@@ -200,34 +200,36 @@ Login
 
     {/* ================= HERO SECTION ================= */}
 
+<section className="hero">
 
-<section className="main-section">
 
-    <div className="main-content">
-        <h1>
-            Discover Events That Match Your Vibe
-        </h1>
+<div className="hero-content">
 
-        <p>
-            Explore concerts, comedy shows, sports events, festivals and workshops happening near you. Book your tickets easily and enjoy unforgettable experiences.
-        </p>
 
-        <Link to="/events">
+<h1>
+Discover Events That Match Your Vibe
+</h1>
 
-            <button className="explore-btn">
 
-                Explore Events
+<p>
 
-            </button>
+Explore concerts, comedy shows, sports events, festivals and workshops
+happening near you. Book your tickets easily and create unforgettable memories.
 
-        </Link>
+</p>
 
-    </div>
 
-    {/* <!-- Right side image --> */}
-    <div className="main-image">
-        <img src="/images/event illustrations.avif" alt="Event Illustration"/>
-    </div>
+<Link to="/events">
+
+<button>
+Explore Events
+</button>
+
+</Link>
+
+
+</div>
+
 
 </section>
 
@@ -328,6 +330,51 @@ state={{
    date:"25 July 2026",
    time:"8 PM",
    price:"₹499"
+ }
+}}
+>
+
+<button>
+
+Book Now
+
+</button>
+
+</Link>
+
+
+        </div>
+
+<div className="event-card">
+
+
+            <img src="/images/badminton.jpg" alt="Sports"/>
+
+
+            <h3>Badminton Premiere League</h3>
+
+
+            <p>Sports</p>
+
+            <p>📍 Kolkata</p>
+
+            <p>📅 10 October 2026</p>
+
+
+            <h4>₹399</h4>
+
+
+            <Link
+to="/eventDetails"
+state={{
+ event:{
+   image:"/images/badminton.jpg",
+   name:"Badminton Premiere League",
+   category:"Sports",
+   location:"Kolkata",
+   date:"10 October 2026",
+   time:"2 PM",
+   price:"₹399"
  }
 }}
 >
@@ -499,7 +546,66 @@ Book Now
 
 
 </section>
+<section className="about-section">
 
+
+<h2>
+About TheShowSpot
+</h2>
+
+
+<h3>
+Your gateway to unforgettable experiences
+</h3>
+
+
+<p>
+
+From exciting concerts and movies to sports events and learning workshops,
+TheShowSpot helps users discover events, reserve seats and enjoy a smooth
+digital booking experience with secure QR based tickets.
+
+</p>
+
+
+
+<div className="stats">
+
+
+<div>
+<h1>15+</h1>
+<p>Events</p>
+</div>
+
+
+<div>
+<h1>10+</h1>
+<p>Cities</p>
+</div>
+
+
+<div>
+<h1>24/7</h1>
+<p>Digital Access</p>
+</div>
+
+
+</div>
+
+
+
+<div className="contact">
+
+<span>📧 support@theshowspot.com</span>
+
+<span>📞 +91 98765 432XX</span>
+
+
+</div>
+
+
+
+</section>
 {/* <!--footer--> */}
 
 
@@ -532,7 +638,7 @@ Book Now
             <h3>Quick Links</h3>
 
 
-            <Link to="/" className="footer-link">
+            <Link to="/homepage" className="footer-link">
                 Home
             </Link>
 
@@ -565,8 +671,8 @@ Book Now
                 Concerts
             </Link>
 
-            <Link to="/events#comedy" className="footer-link">
-                Comedy
+            <Link to="/events#shows" className="footer-link">
+                Shows
             </Link>
 
             <Link to="/events#sports" className="footer-link">

@@ -151,111 +151,86 @@
 
 
 /* main content */
-/* ================= MAIN SECTION ================= */
+.hero{
+
+    height:500px;
+
+    background:
+linear-gradient(
+rgba(0,0,0,0.70),
+rgba(0,0,0,0.70)
+),
+    url("/images/bg image2.jpg");
 
 
-.main-section{
+    background-size:cover;
 
-    width:100%;
-
-    min-height:450px;
+    background-position:center;
 
     display:flex;
 
     align-items:center;
 
-    justify-content:space-between;
+    justify-content:center;
 
-    padding:40px 70px;
-
-    background:#f8f8f8;
+    text-align:center;
 
 }
 
 
-/* Left side */
+.hero-content{
 
-.main-content{
+    width:700px;
 
-    width:50%;
-
-}
-
-
-.main-content h1{
-
-    font-size:38px;
-
-    color:#222;
-
-    margin-bottom:20px;
+    color:white;
 
 }
 
 
-.main-content p{
+.hero-content h1{
 
-    font-size:16px;
-
-    color:#555;
-
-    line-height:1.6;
-
-    width:90%;
+    font-size:50px;
 
     margin-bottom:25px;
 
 }
 
 
+.hero-content p{
 
-/* Button */
+    font-size:20px;
+
+    line-height:1.6;
+
+}
 
 
-.explore-btn{
+.hero-content button{
 
-    padding:12px 22px;
+    margin-top:35px;
 
-    background:#ff5a5f;
-
-    color:white;
+    padding:15px 40px;
 
     border:none;
 
-    border-radius:5px;
+    border-radius:30px;
 
-    font-size:15px;
+    background:#ff4b5c;
+
+    color:white;
+
+    font-size:18px;
 
     cursor:pointer;
 
 }
 
 
+.hero-content button:hover{
 
-
-/* Right side */
-
-
-.main-image{
-
-    width:40%;
-    height: 350px;
-    justify-content:center;
-    align-items:center;
-}
-
-
-.main-image img{
-
-    width:100%;
-    height: 114%;
-    object-fit:cover;
-
-    border-radius:10px;
+    background:#e63946;
 
 }
-
-
 
 /*event cards*/
 /* ================= EVENTS SECTION ================= */
@@ -643,5 +618,101 @@
     color:#aaa;
 
     font-size:14px;
+
+}
+.about-section{
+
+    margin:70px auto;
+
+    width:75%;
+
+    padding:60px;
+
+    text-align:center;
+
+    background:
+    linear-gradient(
+        135deg,
+        #ff4b5c,
+        #ff758c
+    );
+
+    color:white;
+
+    border-radius:30px;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,0.2);
+
+}
+
+
+.about-section h2{
+
+    font-size:38px;
+
+}
+
+
+.about-section h3{
+
+    margin-top:15px;
+
+    font-size:24px;
+
+}
+
+
+.about-section > p{
+
+    width:70%;
+
+    margin:30px auto;
+
+    line-height:1.8;
+
+    font-size:17px;
+
+}
+
+
+.stats{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:80px;
+
+    margin-top:40px;
+
+}
+
+
+.stats h1{
+
+    font-size:42px;
+
+}
+
+
+.stats p{
+
+    font-size:18px;
+
+}
+
+
+.contact{
+
+    margin-top:40px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:50px;
+
+    font-weight:bold;
 
 }
