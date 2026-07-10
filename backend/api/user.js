@@ -37,46 +37,6 @@ router.post("/register", async(req,res)=>{
 
 
 // login user
-
-router.post("/login", async(req,res)=>{
-
-
-    const {email,password}=req.body;
-
-
-    const user = await User.findOne({
-
-        email:email,
-        password:password
-
-    });
-
-
-    if(user){
-
-        res.json({
-            message:"Login successful"
-        });
-
-    }
-
-    else{
-
-        res.json({
-            message:"Invalid details"
-        });
-
-    }
-
-
-});
-
-
-
-module.exports = router;
-
-
-// login user
 router.post("/login", async (req,res)=>{
 
     const {email,password}=req.body;
@@ -113,3 +73,6 @@ router.post("/login", async (req,res)=>{
     }
 
 });
+
+
+module.exports = router;
