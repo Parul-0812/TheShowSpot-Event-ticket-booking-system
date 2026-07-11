@@ -107,9 +107,7 @@ function Navbar() {
 
     <Link to="/events">Events</Link>
 
-    <Link to="/hostEvent">Host Event</Link>
-
-    <a href="/#features">Features</a>
+    <Link to="/features" className="nav-link">Features</Link>
 
 </div>
 

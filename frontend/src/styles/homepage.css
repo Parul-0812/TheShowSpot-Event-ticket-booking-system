@@ -676,33 +676,38 @@ rgba(0,0,0,0.70)
 }
 
 
-.stats{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:80px;
-
-    margin-top:40px;
-
+.about-stats{
+    display: flex;
+    justify-content: center;   /* Centers the three boxes */
+    align-items: center;
+    gap: 30px;
+    margin: 45px auto;
+    flex-wrap: wrap;
 }
 
-
-.stats h1{
-
-    font-size:42px;
-
+.about-stat{
+    width: 240px;
+    height: 140px;
+    background: white;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
+.about-stat h1{
+    color:#ff4b5c;
+    font-size:48px;
+    margin-bottom:10px;
+}
 
-.stats p{
-
+.about-stat p{
+    color:#666;
     font-size:18px;
-
+    font-weight:600;
 }
-
-
 .contact{
 
     margin-top:40px;

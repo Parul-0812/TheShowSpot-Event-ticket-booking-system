@@ -189,9 +189,9 @@ Login
     
         <Link to="/events">Events</Link>
     
-        <Link to="/hostEvent">Host Event</Link>
-    
-        <a href="/#features">Features</a>
+        <Link to="/features" className="nav-link">
+            Features
+        </Link>
     
     </div>
     
@@ -570,26 +570,22 @@ digital booking experience with secure QR based tickets.
 
 
 
-<div className="stats">
+<div className="about-stats">
 
+    <div className="about-stat">
+        <h1>15+</h1>
+        <p>Events</p>
+    </div>
 
-<div>
-<h1>15+</h1>
-<p>Events</p>
-</div>
+    <div className="about-stat">
+        <h1>10+</h1>
+        <p>Cities</p>
+    </div>
 
-
-<div>
-<h1>10+</h1>
-<p>Cities</p>
-</div>
-
-
-<div>
-<h1>24/7</h1>
-<p>Digital Access</p>
-</div>
-
+    <div className="about-stat">
+        <h1>24/7</h1>
+        <p>Digital Access</p>
+    </div>
 
 </div>
 
