@@ -716,3 +716,22 @@ rgba(0,0,0,0.70)
     font-weight:bold;
 
 }
+
+.page-navbar{
+
+    display:flex;
+
+    justify-content:left;
+
+    gap:50px;
+
+    padding:18px;
+
+    background:white;
+
+    border-top:1px solid #eee;
+
+    border-bottom:1px solid #eee;
+    margin-left: 30px;
+
+}

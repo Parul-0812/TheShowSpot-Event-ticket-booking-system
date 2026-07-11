@@ -2,6 +2,8 @@ import React from "react";
 import { useLocation, Link } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import "../styles/ticket.css";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 
 function Ticket(){
@@ -21,6 +23,8 @@ function Ticket(){
 
 
     return(
+        <>
+        <Navbar />
 
         <div className="ticket-container">
 
@@ -96,7 +100,8 @@ function Ticket(){
 
 
         </div>
-
+        <Footer />
+</>
     )
 
 }

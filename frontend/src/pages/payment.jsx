@@ -2,7 +2,8 @@ import React,{useState} from "react";
 import {useLocation,useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../styles/payment.css";
-
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 function Payment(){
 
@@ -65,7 +66,8 @@ ticketId:result.data.ticketId
 
 
 return(
-
+<>
+<Navbar />
 <div className="payment-page">
 
 
@@ -216,7 +218,8 @@ processing
 
 
 </div>
-
+<Footer />
+</>
 )
 
 

@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/bookings.css";
 import { QRCodeCanvas } from "qrcode.react";
+import Navbar from "../components/navbar";
+import Footer from "../components/Footer";
 
 function Bookings(){
 
@@ -154,6 +156,8 @@ user:"Parul"
 }
 
     return(
+        <>
+        <Navbar />
 
         <div className="booking-container">
 
@@ -291,7 +295,8 @@ Total Amount: ₹{total}
 
 
         </div>
-
+        <Footer />
+</>
 
     )
 

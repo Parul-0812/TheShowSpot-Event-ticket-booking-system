@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 // import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/navbar";
 
 
 function events(){
@@ -144,138 +145,31 @@ event.location===selectedCity
     return(
         <>
 
+<Navbar />
 
-{/* <!-- ================= NAVBAR ================= --> */}
+<div className="category-bar">
 
+                <Link to="/events#movies">
+                    Movies
+                </Link>
 
-<header>
+                <Link to="/events#concerts">
+                    Concerts
+                </Link>
 
+                <Link to="/events#shows">
+                    Shows
+                </Link>
 
-    <nav className="navbar">
+                <Link to="/events#sports">
+                    Sports
+                </Link>
 
+                <Link to="/events#workshops">
+                    Workshops
+                </Link>
 
-        <Link to="/" className="logo">
-
-            🎟️ TheShowSpot
-
-        </Link>
-
-
-
-        <div className="search-box">
-
-
-            <input 
-
-type="text"
-
-placeholder="Search events, cities, categories..."
-
-value={search}
-
-onChange={(e)=>setSearch(e.target.value)}
-
-/>
-
-
-        </div>
-
-
-
-
-        <div className="nav-right">
-
-{/* 
-            <p>Select City</p> */}
-
-        {
-
-login
-
-?
-
-<>
-
-<Link to="/myBookings">
-
-<button className="login-btn">
-My Tickets
-</button>
-
-</Link>
-
-
-
-
-<button
-className="login-btn"
-onClick={logout}
->
-
-Logout
-
-</button>
-
-</>
-
-
-:
-
-<Link to="/login">
-
-<button className="login-btn">
-Login
-</button>
-
-</Link>
-
-}
-
-        </div>
-
-
-
-    </nav>
-
-
-
-
-
-    <div className="category-bar">
-
-
-        <Link to="#movies" className="category-link">
-            Movies
-        </Link>
-
-        <Link to="#concerts" className="category-link">
-            Concerts
-        </Link>
-
-        <Link to="#shows" className="category-link">
-            Shows
-        </Link>
-
-        <Link to="#sports" className="category-link">
-            Sports
-        </Link>
-
-        <Link to="#workshops" className="category-link">
-            Workshops
-        </Link>
-
-
-    </div>
-
-
-
-</header>
-
-
-
-
-
-
+            </div>
 
 {/* <!-- ================= EVENTS ================= --> */}
 

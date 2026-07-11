@@ -68,6 +68,36 @@ router.get("/all",async(req,res)=>{
 
 
 })
+router.post("/add", async(req,res)=>{
 
+    try{
+
+        const Event = require("../database/events");
+
+        const newEvent = new Event(req.body);
+
+        await newEvent.save();
+
+        res.json({
+
+            success:true,
+            message:"Event Added Successfully"
+
+        });
+
+    }
+
+    catch(error){
+
+        res.json({
+
+            success:false,
+            message:"Unable to Add Event"
+
+        });
+
+    }
+
+});
 
 module.exports = router;

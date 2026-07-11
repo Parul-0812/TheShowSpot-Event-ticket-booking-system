@@ -2,6 +2,8 @@ import React from "react";
 import "../styles/eventDetails.css";
 import { useLocation, Link } from "react-router-dom";
 import {useNavigate} from "react-router-dom";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 function EventDetails(){
     const navigate = useNavigate();
@@ -20,7 +22,8 @@ console.log("EVENT DATA:", event);
 
 
     return(
-
+        <>
+        <Navbar />
         <div className="details-container">
 
         <button 
@@ -88,8 +91,10 @@ onClick={()=>navigate(-1)}
 
 
         </div>
-
+        <Footer />
+        </>
     )
+    
 
 }
 
