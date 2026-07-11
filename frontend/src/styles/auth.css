@@ -160,3 +160,40 @@
 
 
 }
+.login-type{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin:20px 0 25px;
+
+}
+
+.login-type button{
+
+    padding:10px 20px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#e5e5e5;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:0.3s;
+
+}
+
+.login-type button.active{
+
+    background:#ff4b5c;
+
+    color:white;
+
+}

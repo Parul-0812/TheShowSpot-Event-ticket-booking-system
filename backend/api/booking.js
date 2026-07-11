@@ -62,65 +62,53 @@ router.get("/all", async(req,res)=>{
 
 })
 
-router.post("/bookedSeats", async(req,res)=>{
-
+router.post("/bookedSeats", async (req, res) => {
 
     try{
 
+        const { eventName } = req.body;
 
-        const {eventName} = req.body;
+        console.log("Received Event Name:", eventName);
 
+        const allBookings = await Booking.find();
+
+        console.log("All Bookings:", allBookings);
 
         const bookings = await Booking.find({
-            eventName:eventName
+            eventName: eventName
         });
 
-
+        console.log("Matching Bookings:", bookings);
 
         let bookedSeats = [];
 
-
         bookings.forEach((booking)=>{
-
-
             bookedSeats = [
                 ...bookedSeats,
                 ...booking.seats
-            ]
-
-
+            ];
         });
 
-
+        console.log("Booked Seats:", bookedSeats);
 
         res.json({
-
             success:true,
-
-            bookedSeats:bookedSeats
-
-        })
-
-
+            bookedSeats
+        });
 
     }
     catch(error){
 
+        console.log(error);
 
         res.json({
-
             success:false,
-
             message:"Error fetching seats"
-
-        })
-
+        });
 
     }
 
-
-
-})
+});
 
 router.post("/verify", async(req,res)=>{
 

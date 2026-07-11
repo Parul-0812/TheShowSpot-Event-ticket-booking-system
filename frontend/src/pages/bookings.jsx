@@ -4,12 +4,13 @@ import axios from "axios";
 import "../styles/bookings.css";
 import { QRCodeCanvas } from "qrcode.react";
 import Navbar from "../components/navbar";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 
 function Bookings(){
 
     const location = useLocation();
     const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const event = location.state?.event;
     const basePrice = event ? Number(event.price.replace("₹","")):0;
@@ -42,30 +43,38 @@ function Bookings(){
     {id:"C6", type:"Silver", price:basePrice}
 
 ];
-useEffect(()=>{
+useEffect(() => {
 
+    if(!event) return;
 
-    const getBookedSeats = async()=>{
+    const getBookedSeats = async () => {
 
+        try{
 
-        const result = await axios.post(
-            "http://localhost:5000/booking/bookedSeats",
-            {
-                eventName:event.name
-            }
-        );
+            const result = await axios.post(
+                "http://localhost:5000/booking/bookedSeats",
+                {
+                    eventName: event.name
+                }
+            );
 
+            console.log("Event:", event.name);
+            console.log("Booked Seats:", result.data.bookedSeats);
 
-        setBookedSeats(result.data.bookedSeats);
+            setBookedSeats(result.data.bookedSeats);
 
+        }
+        catch(error){
+
+            console.log(error);
+
+        }
 
     }
 
-
     getBookedSeats();
 
-
-},[]);
+}, [event]);
 const selectSeat = (seat)=>{
 
 
@@ -144,7 +153,7 @@ seats:selectedSeats,
 
 amount:total,
 
-user:"Parul"
+user:user.name
 
 
 }
@@ -237,6 +246,8 @@ selectedSeats.includes(seat.id)
 :
 
 "seat"
+
+
 
 }
 
