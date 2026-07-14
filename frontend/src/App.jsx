@@ -13,6 +13,7 @@ import MyBookings from "./pages/myBookings";
 import Notifications from "./pages/notifications";
 import Payment from "./pages/payment";
 import AdminLogin from "./pages/adminLogin";
+import HostEvent from "./pages/HostEvent";
 import Features from "./pages/Features";
 
 function App(){
@@ -36,6 +37,7 @@ function App(){
             <Route path="/ticket" element={<Ticket/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/myBookings" element={<MyBookings/>}/>
+            <Route path="/host-event" element={<HostEvent />} />
             <Route path="/notifications" element={<Notifications/>}/>
             <Route
 path="/features"

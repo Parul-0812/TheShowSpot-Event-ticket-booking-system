@@ -1,0 +1,333 @@
+/* ---------------------- */
+/* PAGE */
+/* ---------------------- */
+
+.host-page{
+
+    width:100%;
+    min-height:100vh;
+    background:#f8f9fc;
+
+}
+
+
+/* ---------------------- */
+/* HERO */
+/* ---------------------- */
+
+.host-hero{
+
+    height:350px;
+    background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+    url("/images/eventss.webp");
+
+    background-size:cover;
+    background-position:center;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+    align-items: center;
+    margin-left: 40px;
+    margin-right: 40px;
+    /* margin-top: 20px; */
+
+    text-align:center;
+
+    padding:20px;
+
+}
+
+.host-hero h1{
+
+    font-size:48px;
+
+    margin-bottom:15px;
+
+}
+
+.host-hero p{
+
+    width:60%;
+
+    font-size:18px;
+
+    line-height:30px;
+
+}
+
+
+/* ---------------------- */
+/* MAIN CONTAINER */
+/* ---------------------- */
+
+.host-container{
+
+    width:80%;
+
+    margin:50px auto;
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:40px;
+
+    align-items:start;
+
+}
+
+
+/* ---------------------- */
+/* FORM */
+/* ---------------------- */
+
+.event-form{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:35px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+
+}
+
+.event-form h2{
+
+    margin-top:20px;
+
+    margin-bottom:15px;
+
+    color:#222;
+
+    border-left:5px solid #ff4d6d;
+
+    padding-left:10px;
+
+}
+
+.event-form input,
+.event-form textarea,
+.event-form select{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-bottom:18px;
+
+    border-radius:8px;
+
+    border:1px solid #ddd;
+
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+.event-form input:focus,
+.event-form textarea:focus,
+.event-form select:focus{
+
+    outline:none;
+
+    border:1px solid #ff4d6d;
+
+    box-shadow:0 0 8px rgba(255,77,109,.3);
+
+}
+
+.event-form textarea{
+
+    resize:none;
+
+}
+
+
+/* ---------------------- */
+/* ROWS */
+/* ---------------------- */
+
+.time-row,
+.ticket-row{
+
+    display:flex;
+
+    gap:20px;
+
+}
+
+.time-row input,
+.ticket-row input{
+
+    flex:1;
+
+}
+
+
+/* ---------------------- */
+/* BUTTON */
+/* ---------------------- */
+
+.submit-btn{
+
+    width:100%;
+
+    background:#ff4d6d;
+
+    color:white;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    margin-top:15px;
+
+}
+
+.submit-btn:hover{
+
+    background:#e63d5d;
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ---------------------- */
+/* PREVIEW CARD */
+/* ---------------------- */
+
+.preview-card{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:25px;
+
+    position:sticky;
+
+    top:30px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.1);
+
+}
+
+.preview-card h2{
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}
+
+.preview-card img{
+
+    width:100%;
+
+    height:250px;
+
+    object-fit:cover;
+
+    border-radius:12px;
+
+    margin-bottom:20px;
+
+}
+
+.placeholder{
+
+    width:100%;
+
+    height:250px;
+
+    border:2px dashed #ccc;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:12px;
+
+    color:#888;
+
+    margin-bottom:20px;
+
+}
+
+.preview-card h3{
+
+    text-align:center;
+
+    margin-bottom:15px;
+
+    color:#222;
+
+}
+
+.preview-card p{
+
+    font-size:17px;
+
+    margin:12px 0;
+
+}
+
+
+/* ---------------------- */
+/* MOBILE */
+/* ---------------------- */
+
+@media(max-width:900px){
+
+.host-container{
+
+grid-template-columns:1fr;
+
+}
+
+.host-hero h1{
+
+font-size:34px;
+
+}
+
+.host-hero p{
+
+width:90%;
+
+}
+
+.preview-card{
+
+position:relative;
+
+top:0;
+
+}
+
+.time-row,
+.ticket-row{
+
+flex-direction:column;
+
+}
+
+}

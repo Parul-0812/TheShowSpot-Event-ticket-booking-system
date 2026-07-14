@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const eventSchema = new mongoose.Schema({
+const eventRequestSchema = new mongoose.Schema({
 
     // Event Information
     name: {
@@ -14,7 +14,8 @@ const eventSchema = new mongoose.Schema({
     },
 
     description: {
-        type: String
+        type: String,
+        required: true
     },
 
     // Date & Time
@@ -24,68 +25,74 @@ const eventSchema = new mongoose.Schema({
     },
 
     startTime: {
-        type: String
+        type: String,
+        required: true
     },
 
     endTime: {
-        type: String
+        type: String,
+        required: true
     },
 
-    // Venue
+    // Venue Details
     venue: {
-        type: String
+        type: String,
+        required: true
     },
 
     city: {
-        type: String
+        type: String,
+        required: true
     },
 
     address: {
-        type: String
-    },
-
-    // Keeping this for compatibility with your existing code
-    location: {
-        type: String
+        type: String,
+        required: true
     },
 
     // Ticket Details
-    price: {
+    ticketPrice: {
         type: Number,
         required: true
     },
 
     totalSeats: {
-        type: Number
-    },
-
-    // Event Poster
-    image: {
-        type: String
+        type: Number,
+        required: true
     },
 
     // Organizer Details
     organizerName: {
-        type: String
+        type: String,
+        required: true
     },
 
     email: {
-        type: String
+        type: String,
+        required: true
     },
 
     phone: {
-        type: String
+        type: String,
+        required: true
     },
 
-    // Approval Status
+    // Event Poster
+    image: {
+        type: String,
+        default: ""
+    },
+
+    // Request Status
     status: {
         type: String,
         enum: ["Pending", "Approved", "Rejected"],
         default: "Pending"
     }
 
-}, {
+},
+{
     timestamps: true
 });
 
-module.exports = mongoose.model("Event", eventSchema);
+module.exports = mongoose.model("EventRequest", eventRequestSchema);
