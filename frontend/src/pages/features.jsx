@@ -193,7 +193,7 @@ Platform Highlights
 
 <div>
 
-<h1>50+</h1>
+<h1>15+</h1>
 
 <p>Events</p>
 
@@ -201,7 +201,7 @@ Platform Highlights
 
 <div>
 
-<h1>15+</h1>
+<h1>8+</h1>
 
 <p>Cities</p>
 

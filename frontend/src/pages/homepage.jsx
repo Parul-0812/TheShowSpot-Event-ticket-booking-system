@@ -578,7 +578,7 @@ digital booking experience with secure QR based tickets.
     </div>
 
     <div className="about-stat">
-        <h1>10+</h1>
+        <h1>8+</h1>
         <p>Cities</p>
     </div>
 
