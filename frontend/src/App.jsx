@@ -15,6 +15,7 @@ import Payment from "./pages/payment";
 import AdminLogin from "./pages/adminLogin";
 import HostEvent from "./pages/HostEvent";
 import Features from "./pages/Features";
+import Organizer from "./pages/Organizer";
 
 function App(){
 
@@ -38,6 +39,7 @@ function App(){
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/myBookings" element={<MyBookings/>}/>
             <Route path="/host-event" element={<HostEvent />} />
+            <Route path="/organizer" element={<Organizer />} />
             <Route path="/notifications" element={<Notifications/>}/>
             <Route
 path="/features"

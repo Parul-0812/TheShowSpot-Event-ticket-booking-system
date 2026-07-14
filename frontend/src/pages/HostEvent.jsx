@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../styles/hostevent.css";
 import Navbar from "../components/navbar";
+import { useNavigate } from "react-router-dom";
 
 function HostEvent() {
+    const navigate = useNavigate();
     
 
     const [eventData, setEventData] = useState({
+        
 
         eventName: "",
         category: "",
@@ -25,6 +28,10 @@ function HostEvent() {
         image: ""
 
     });
+    const [imageFile, setImageFile] = useState(null);
+
+const [loading, setLoading] = useState(false);
+const [submitted, setSubmitted] = useState(false);
 
     const handleChange = (e) => {
 
@@ -41,30 +48,76 @@ function HostEvent() {
 
     const handleImage = (e) => {
 
-        const file = e.target.files[0];
+    const file = e.target.files[0];
 
-        if(file){
+    if(file){
 
-            setEventData({
+        setImageFile(file);
 
-                ...eventData,
-                image: URL.createObjectURL(file)
+        setEventData({
 
-            });
+            ...eventData,
+
+            image: URL.createObjectURL(file)
+
+        });
+
+    }
+
+};
+
+    const submitEvent = async (e) => {
+
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+
+        const formData = new FormData();
+
+        formData.append("name", eventData.eventName);
+        formData.append("category", eventData.category);
+        formData.append("description", eventData.description);
+        formData.append("date", eventData.date);
+        formData.append("startTime", eventData.startTime);
+        formData.append("endTime", eventData.endTime);
+        formData.append("venue", eventData.venue);
+        formData.append("city", eventData.city);
+        formData.append("address", eventData.address);
+        formData.append("ticketPrice", eventData.ticketPrice);
+        formData.append("totalSeats", eventData.totalSeats);
+        formData.append("organizerName", eventData.organizerName);
+        formData.append("email", eventData.email);
+        formData.append("phone", eventData.phone);
+
+        if(imageFile){
+
+            formData.append("image", imageFile);
 
         }
 
-    };
+        const response = await axios.post(
 
-    const submitEvent = async(e)=>{
+            "http://localhost:5000/event-request/submit",
 
-        e.preventDefault();
+            formData,
 
-        try{
+            {
 
-            await axios.post("http://localhost:5000/events/add",eventData);
+                headers:{
 
-            alert("Event Submitted Successfully!");
+                    "Content-Type":"multipart/form-data"
+
+                }
+
+            }
+
+        );
+
+        if(response.data.success){
+
+            setSubmitted(true);
 
             setEventData({
 
@@ -86,15 +139,27 @@ function HostEvent() {
 
             });
 
-        }
-
-        catch(error){
-
-            alert("Unable to Submit Event");
+            setImageFile(null);
 
         }
 
-    };
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        alert("Unable to Submit Event");
+
+    }
+
+    finally{
+
+        setLoading(false);
+
+    }
+
+};
 
     return(
         <>
@@ -141,7 +206,7 @@ required
 
 <option>Movies</option>
 <option>Concert</option>
-<option>Comedy</option>
+<option>Shows</option>
 <option>Sports</option>
 <option>Workshop</option>
 
@@ -248,13 +313,42 @@ onChange={handleChange}
 
 </div>
 
-<h2>Upload Poster</h2>
+<h2>Upload Event Poster</h2>
 
-<input
-type="file"
-accept="image/*"
-onChange={handleImage}
-/>
+<label className="upload-box">
+
+    <input
+        type="file"
+        accept="image/*"
+        onChange={handleImage}
+        hidden
+    />
+
+    {
+        eventData.image ?
+
+        <img
+            src={eventData.image}
+            className="upload-preview"
+            alt="poster"
+        />
+
+        :
+
+        <div className="upload-content">
+
+            <h1>📸</h1>
+
+            <h3>Drag & Drop Poster</h3>
+
+            <p>or Click to Browse</p>
+
+
+        </div>
+
+    }
+
+</label>
 
 <h2>Organizer Details</h2>
 
@@ -280,9 +374,22 @@ onChange={handleChange}
 
 <input type="text" placeholder="Phone Number" name="phone" value={eventData.phone} onChange={handleChange}/>
 
-<button className="submit-btn">
+<button
+className="submit-btn"
+disabled={loading}
+>
 
-Host My Event
+{
+
+loading ?
+
+"Submitting..."
+
+:
+
+"Host My Event"
+
+}
 
 </button>
 
@@ -328,7 +435,7 @@ eventData.eventName || "Event Name"
 
 <p>
 
-📍 {eventData.venue || "Venue"}
+📍 {eventData.city || "Venue"}
 
 </p>
 
@@ -355,6 +462,83 @@ eventData.eventName || "Event Name"
 </div>
 
 </div>
+{
+
+submitted && (
+
+<div className="modal-overlay">
+
+<div className="success-modal">
+
+<div className="success-animation">
+
+✅
+
+</div>
+
+<h2>
+
+Event Submitted Successfully!
+
+</h2>
+
+<p>
+
+Thank you for choosing
+
+<strong> TheShowSpot</strong>.
+
+</p>
+
+<p>
+
+Your event has been submitted for review.
+
+Once approved,
+
+it will automatically appear on our platform.
+
+</p>
+
+<div className="modal-buttons">
+
+<button
+
+className="secondary-btn"
+
+onClick={()=>{
+
+setSubmitted(false);
+
+}}
+
+>
+
+Host Another Event
+
+</button>
+
+<button
+
+className="primary-btn"
+
+onClick={()=>navigate("/")}
+
+>
+
+Back to Home
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+)
+
+}
 </>
 
     );

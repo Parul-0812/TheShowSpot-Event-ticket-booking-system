@@ -1,0 +1,100 @@
+.admin-navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#fff;
+    padding:20px 30px;
+    border-radius:15px;
+    margin-bottom:30px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.admin-navbar-left h2{
+    color:#222;
+    margin-bottom:5px;
+}
+
+.admin-navbar-left p{
+    color:#666;
+    font-size:15px;
+}
+
+.admin-navbar-right{
+    display:flex;
+    align-items:center;
+    gap:30px;
+}
+
+.notification{
+    position:relative;
+    cursor:pointer;
+}
+
+.nav-icon{
+    font-size:22px;
+    color:#444;
+}
+
+.notification-count{
+    position:absolute;
+    top:-8px;
+    right:-10px;
+    width:20px;
+    height:20px;
+    background:#ef4444;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:11px;
+}
+
+.admin-profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+}
+
+.profile-avatar{
+    width:45px;
+    height:45px;
+    background:#ff4d6d;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:18px;
+    font-weight:600;
+}
+
+.profile-info h4{
+    color:#222;
+    font-size:16px;
+}
+
+.profile-info p{
+    color:#777;
+    font-size:13px;
+}
+
+.dropdown-icon{
+    color:#777;
+}
+
+@media(max-width:768px){
+
+.admin-navbar{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+}
+
+.admin-navbar-right{
+    width:100%;
+    justify-content:space-between;
+}
+
+}
