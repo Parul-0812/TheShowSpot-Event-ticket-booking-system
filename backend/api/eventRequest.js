@@ -188,23 +188,25 @@ router.put("/approve/:id", async(req,res)=>{
 
         }
 
-        const event = new Event({
-
-            name:request.name,
-
-            category:request.category,
-
-            location:request.city,
-
-            date:request.date,
-
-            time:request.startTime,
-
-            price:request.ticketPrice,
-
-            image:request.image
-
-        });
+    const event = new Event({
+    name:request.name,
+    category:request.category,
+    description:request.description,
+    date:request.date,
+    startTime:request.startTime,
+    endTime:request.endTime,
+    venue:request.venue,
+    city:request.city,
+    address:request.address,
+    location:request.city,
+    price:Number(request.ticketPrice),
+    totalSeats:Number(request.totalSeats),
+    image:request.image,
+    organizerName:request.organizerName,
+    email:request.email,
+    phone:request.phone,
+    status:"Approved"
+    });
 
         await event.save();
 

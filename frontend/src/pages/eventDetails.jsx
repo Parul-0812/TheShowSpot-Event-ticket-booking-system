@@ -62,7 +62,7 @@ onClick={()=>navigate(-1)}
 
 
                     <h2>
-                        {event.price}
+                        ₹{event.price}
                     </h2>
 
 
