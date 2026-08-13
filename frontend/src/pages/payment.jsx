@@ -370,7 +370,7 @@ Authorize Payment
 <input type="text" placeholder="Enter User ID" value={userId} onChange={(e)=>setUserId(e.target.value)}/>
 <label>Password</label>
 <input type="password" placeholder="Enter password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
-<p className="demo-warning">Simulation environment. Do not enter real banking credentials.</p>
+
 {error&&<p className="payment-error">{error}</p>}
 <button className="pay-button" onClick={bankLogin}>Login & Continue</button>
 <button className="back-button" onClick={()=>setStep("details")}>Back</button>
