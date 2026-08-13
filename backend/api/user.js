@@ -1,78 +1,83 @@
-const express = require("express");
+const express=require("express");
+const User=require("../database/user");
+const router=express.Router();
 
-const User = require("../database/user");
+router.post("/register",async(req,res)=>{
+try{
+const {name,email,phone,password}=req.body;
 
+if(!name||!email||!phone||!password){
+return res.json({
+success:false,
+message:"All fields are required"
+});
+}
 
-const router = express.Router();
+const existingUser=await User.findOne({email});
 
+if(existingUser){
+return res.json({
+success:false,
+message:"Email already registered"
+});
+}
 
-// register user
-
-router.post("/register", async(req,res)=>{
-
-    const {name,email,password} = req.body;
-
-
-    const newUser = new User({
-
-        name,
-        email,
-        password
-
-    });
-
-
-    await newUser.save();
-
-
-    res.json({
-
-        message:"Registration successful"
-
-    });
-
-
+const newUser=new User({
+name,
+email,
+phone,
+password
 });
 
+await newUser.save();
 
-
-// login user
-router.post("/login", async (req,res)=>{
-
-    const {email,password}=req.body;
-
-    try{
-        const user = await User.findOne({email});
-
-        if(!user){
-            return res.json({
-                success:false,
-                message:"User not found"
-            });
-        }
-
-        if(user.password !== password){
-            return res.json({
-                success:false,
-                message:"Wrong password"
-            });
-        }
-
-        res.json({
-            success:true,
-            message:"Login successful",
-            user:user
-        });
-
-    }
-    catch(error){
-        res.json({
-            success:false,
-            message:"Something went wrong"
-        });
-    }
-
+res.json({
+success:true,
+message:"Registration successful"
+});
+}
+catch(error){
+console.log(error);
+res.status(500).json({
+success:false,
+message:"Registration failed"
+});
+}
 });
 
+router.post("/login",async(req,res)=>{
+const {email,password}=req.body;
 
-module.exports = router;
+try{
+const user=await User.findOne({email});
+
+if(!user){
+return res.json({
+success:false,
+message:"User not found"
+});
+}
+
+if(user.password!==password){
+return res.json({
+success:false,
+message:"Wrong password"
+});
+}
+
+res.json({
+success:true,
+message:"Login successful",
+user:user
+});
+}
+catch(error){
+console.log(error);
+res.json({
+success:false,
+message:"Something went wrong"
+});
+}
+});
+
+module.exports=router;

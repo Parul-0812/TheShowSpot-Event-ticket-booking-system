@@ -7,7 +7,7 @@ const app = express();
 const bookingApi = require("./api/booking");
 const eventRoute = require("./api/events");
 const eventRequestApi = require("./api/eventRequest");
-
+const paymentRoutes=require("./api/payment");
 
 app.use(express.json());
 app.use(cors());
@@ -16,7 +16,7 @@ app.use("/user", userApi);
 app.use("/booking", bookingApi);
 app.use("/events",eventRoute);
 app.use("/event-request", eventRequestApi);
-
+app.use("/payment",paymentRoutes);
 
 mongoose.connect("mongodb://127.0.0.1:27017/TheShowSpot")
 .then(()=>{

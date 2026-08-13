@@ -24,6 +24,10 @@ const [userId,setUserId]=useState("");
 const [password,setPassword]=useState("");
 const [otp,setOtp]=useState("");
 const [error,setError]=useState("");
+const [transactionId]=useState(()=>`TXN-${Math.random().toString(36).substring(2,10).toUpperCase()}`);
+const [paymentStatus,setPaymentStatus]=useState("");
+
+const [paymentId]=useState(()=>Date.now().toString());
 
 if(!booking){
 return(
@@ -52,6 +56,21 @@ const changeMethod=(value)=>{
 setMethod(value);
 setStep("details");
 setError("");
+};
+
+const generateOtp=async()=>{
+try{
+const result=await axios.post("http://localhost:5000/payment/send-otp",{paymentId});
+if(result.data.success){
+setStep("otp");
+setError("");
+}else{
+setError(result.data.message||"Unable to generate verification code.");
+}
+}catch(error){
+console.log(error);
+setError("Unable to connect to payment service.");
+}
 };
 
 const validateDetails=()=>{
@@ -97,23 +116,26 @@ return false;
 return true;
 };
 
-const continuePayment=()=>{
+const continuePayment=async()=>{
 if(!validateDetails())return;
 
 if(method==="UPI"){
-setStep("upiVerify");
+setStep("upiAuthorize");
 return;
 }
 
 if(method==="Card"){
-setStep("otp");
+await generateOtp();
 return;
 }
 
 if(method==="Net Banking"){
 setStep("bankLogin");
-return;
 }
+};
+
+const authorizeUpi=async()=>{
+await generateOtp();
 };
 
 const bankLogin=()=>{
@@ -132,25 +154,60 @@ return;
 setStep("bankConfirm");
 };
 
-const bankConfirm=()=>{
-setStep("otp");
+const bankConfirm=async()=>{
+await generateOtp();
 };
 
 const verifyOtp=async()=>{
 setError("");
 
-if(otp!=="123456"){
-setError("Incorrect OTP. For this demo, use 123456.");
+if(otp.length!==6){
+setError("Please enter the 6-digit verification code.");
 return;
 }
 
 setProcessing(true);
 
+try{
+const result=await axios.post(
+"http://localhost:5000/payment/verify-otp",
+{
+paymentId,
+otp
+}
+);
+
+if(!result.data.success){
+setError(result.data.message);
+setProcessing(false);
+return;
+}
+
+setStep("processing");
+setPaymentStatus("Verifying payment...");
+
+setTimeout(async()=>{
+setPaymentStatus("Confirming booking...");
+
 setTimeout(async()=>{
 try{
-const result=await axios.post("http://localhost:5000/booking/confirm",booking);
+const bookingData={
+...booking,
+paymentMethod:method,
+paymentStatus:"Successful",
+transactionId
+};
 
-if(result.data.success){
+const bookingResult=await axios.post(
+"http://localhost:5000/booking/confirm",
+bookingData
+);
+
+if(bookingResult.data.success){
+setPaymentStatus("Payment successful");
+setProcessing(false);
+setStep("success");
+setTimeout(()=>{
 navigate("/ticket",{
 state:{
 eventName:booking.eventName,
@@ -158,19 +215,37 @@ eventDate:booking.eventDate,
 eventLocation:booking.eventLocation,
 seats:booking.seats,
 amount:booking.amount,
-ticketId:result.data.ticketId
+ticketId:bookingResult.data.ticketId,
+transactionId,
+paymentMethod:method
 }
 });
+},2500);
 }else{
-setError("Payment could not be completed.");
+setError("Payment was verified but booking could not be confirmed.");
 setProcessing(false);
+setStep("otp");
 }
 }catch(error){
 console.log(error);
-setError("Unable to complete payment.");
+setError("Unable to confirm your booking.");
+setProcessing(false);
+setStep("otp");
+}
+},1200);
+},1200);
+
+}catch(error){
+console.log(error);
+setError("Unable to verify payment.");
 setProcessing(false);
 }
-},1500);
+};
+
+const resendOtp=async()=>{
+setOtp("");
+setError("");
+await generateOtp();
 };
 
 return(
@@ -178,15 +253,15 @@ return(
 <Navbar/>
 <div className="payment-page">
 <div className="payment-card">
+{step!=="success"&&step!=="processing"&&(
+<>
 <h1>Checkout 🎟️</h1>
-
 <div className="summary-box">
 <h2>{booking.eventName}</h2>
 <p>📍 {booking.eventLocation}</p>
 <p>📅 {booking.eventDate}</p>
 <p>💺 Seats: {booking.seats.join(", ")}</p>
 </div>
-
 <div className="amount-box">
 <h3>Payment Summary</h3>
 <p>Ticket Amount: <span>₹{booking.amount}</span></p>
@@ -194,6 +269,8 @@ return(
 <hr/>
 <h2>Total: <span>₹{totalAmount}</span></h2>
 </div>
+</>
+)}
 
 {step==="details"&&(
 <>
@@ -201,15 +278,15 @@ return(
 <div className="payment-options">
 <label className={method==="UPI"?"payment-option active":"payment-option"}>
 <input type="radio" checked={method==="UPI"} onChange={()=>changeMethod("UPI")}/>
-<span>UPI</span>
+<span>📱 UPI</span>
 </label>
 <label className={method==="Card"?"payment-option active":"payment-option"}>
 <input type="radio" checked={method==="Card"} onChange={()=>changeMethod("Card")}/>
-<span>Card</span>
+<span>💳 Card</span>
 </label>
 <label className={method==="Net Banking"?"payment-option active":"payment-option"}>
 <input type="radio" checked={method==="Net Banking"} onChange={()=>changeMethod("Net Banking")}/>
-<span>Net Banking</span>
+<span>🏦 Net Banking</span>
 </label>
 </div>
 
@@ -217,7 +294,7 @@ return(
 <div className="payment-form">
 <label>UPI ID</label>
 <input type="text" placeholder="example@upi" value={upiId} onChange={(e)=>setUpiId(e.target.value)}/>
-<p className="payment-hint">Enter your UPI ID to continue.</p>
+<p className="payment-hint">Your UPI payment request will be simulated securely.</p>
 </div>
 )}
 
@@ -253,7 +330,7 @@ return(
 <option>Bank of Baroda</option>
 <option>Canara Bank</option>
 </select>
-<p className="payment-hint">You will be redirected to a secure banking screen.</p>
+<p className="payment-hint">You will continue to a secure banking simulation.</p>
 </div>
 )}
 
@@ -265,15 +342,22 @@ Continue
 </>
 )}
 
-{step==="upiVerify"&&(
+{step==="upiAuthorize"&&(
 <div className="payment-step">
 <div className="step-icon">📱</div>
-<h2>Verify UPI Payment</h2>
-<p>A payment request has been initiated for</p>
-<h2>₹{totalAmount}</h2>
-<p className="payment-hint">For this simulation, continue to authorization.</p>
-<button className="pay-button" onClick={()=>setStep("otp")}>Continue to Authorize</button>
-<button className="back-button" onClick={()=>setStep("details")}>Change Payment Method</button>
+<h2>Authorize UPI Payment</h2>
+<p>TheShowSpot has initiated a payment request.</p>
+<div className="authorization-box">
+<p>UPI ID</p>
+<strong>{upiId}</strong>
+<p>Amount</p>
+<strong>₹{totalAmount}</strong>
+</div>
+<p className="payment-hint">Review the payment details and authorize the transaction.</p>
+<button className="pay-button" onClick={authorizeUpi}>
+Authorize Payment
+</button>
+<button className="back-button" onClick={()=>setStep("details")}>Back</button>
 </div>
 )}
 
@@ -286,7 +370,7 @@ Continue
 <input type="text" placeholder="Enter User ID" value={userId} onChange={(e)=>setUserId(e.target.value)}/>
 <label>Password</label>
 <input type="password" placeholder="Enter password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
-<p className="demo-warning">Demo environment — do not enter real banking credentials.</p>
+<p className="demo-warning">Simulation environment. Do not enter real banking credentials.</p>
 {error&&<p className="payment-error">{error}</p>}
 <button className="pay-button" onClick={bankLogin}>Login & Continue</button>
 <button className="back-button" onClick={()=>setStep("details")}>Back</button>
@@ -297,12 +381,17 @@ Continue
 <div className="payment-step">
 <div className="step-icon">🔐</div>
 <h2>Confirm Payment</h2>
-<p>Bank: {bank}</p>
-<p>Merchant: TheShowSpot</p>
-<p>Amount: ₹{totalAmount}</p>
-<div className="bank-payment-box">
-<p>Review the payment details before authorizing.</p>
+<div className="authorization-box">
+<p>Merchant</p>
+<strong>TheShowSpot</strong>
+<p>Event</p>
+<strong>{booking.eventName}</strong>
+<p>Bank</p>
+<strong>{bank}</strong>
+<p>Amount</p>
+<strong>₹{totalAmount}</strong>
 </div>
+<p className="payment-hint">Review your payment before authorization.</p>
 <button className="pay-button" onClick={bankConfirm}>Confirm & Continue</button>
 <button className="back-button" onClick={()=>setStep("bankLogin")}>Back</button>
 </div>
@@ -312,18 +401,60 @@ Continue
 <div className="payment-step">
 <div className="step-icon">🔐</div>
 <h2>Verify Payment</h2>
-<p>A verification code has been sent to your registered mobile number.</p>
-<label>Enter OTP</label>
+<p>Enter the 6-digit verification code to authorize this payment.</p>
+<div className="otp-transaction">
+<span>Transaction</span>
+<strong>{transactionId}</strong>
+</div>
+<label>Verification Code</label>
 <input className="otp-input" type="text" maxLength="6" placeholder="••••••" value={otp} onChange={(e)=>setOtp(e.target.value.replace(/\D/g,""))}/>
-<p className="payment-hint">Demo OTP: 123456</p>
 {error&&<p className="payment-error">{error}</p>}
 <button className="pay-button" onClick={verifyOtp} disabled={processing}>
-{processing?"Processing Payment...":`Verify & Pay ₹${totalAmount}`}
+{processing?"Verifying...":`Verify & Pay ₹${totalAmount}`}
 </button>
-<button className="back-button" onClick={()=>setStep("details")}>Cancel Payment</button>
+<button className="back-button" onClick={resendOtp}>Resend Code</button>
+<button className="back-button" onClick={()=>{setOtp("");setError("");setStep("details")}}>Cancel Payment</button>
 </div>
 )}
 
+{step==="processing"&&(
+<div className="payment-processing">
+<div className="loader"></div>
+<h2>{paymentStatus}</h2>
+<p>Please don't close this window.</p>
+<div className="processing-steps">
+<p>✓ Payment details verified</p>
+<p>✓ Payment authorization completed</p>
+<p>⏳ Confirming your booking</p>
+</div>
+</div>
+)}
+
+{step==="success"&&(
+<div className="payment-success">
+<div className="success-icon">✓</div>
+<h1>Payment Successful</h1>
+<p>Your payment has been processed successfully.</p>
+<div className="success-details">
+<div>
+<span>Amount Paid</span>
+<strong>₹{totalAmount}</strong>
+</div>
+<div>
+<span>Payment Method</span>
+<strong>{method}</strong>
+</div>
+<div>
+<span>Transaction ID</span>
+<strong>{transactionId}</strong>
+</div>
+</div>
+<div className="success-message">
+✓ Booking confirmed<br/>
+Your ticket is being generated...
+</div>
+</div>
+)}
 </div>
 </div>
 <Footer/>

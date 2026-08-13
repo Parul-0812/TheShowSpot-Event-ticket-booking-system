@@ -1,42 +1,42 @@
-const mongoose = require("mongoose");
+const mongoose=require("mongoose");
 
-
-const bookingSchema = new mongoose.Schema({
-    user:{
-    type:String
+const bookingSchema=new mongoose.Schema({
+user:{
+type:String
 },
-
-    // userName:{
-    //     type:String
-    // },
-
-    eventName:{
-        type:String
-    },
-
-    eventDate:{
-        type:String
-    },
-
-    eventLocation:{
-        type:String
-    },
-
-    seats:{
-        type:Array
-    },
-
-    amount:{
-        type:Number
-    },
-    ticketStatus:{
-    type:String,
-    default:"Valid"
+eventName:{
+type:String
+},
+eventDate:{
+type:String
+},
+eventLocation:{
+type:String
+},
+seats:{
+type:Array
+},
+amount:{
+type:Number
+},
+paymentMethod:{
+type:String,
+enum:["UPI","Card","Net Banking"]
+},
+paymentStatus:{
+type:String,
+enum:["Pending","Successful","Failed","Cancelled"],
+default:"Pending"
+},
+transactionId:{
+type:String
+},
+ticketStatus:{
+type:String,
+default:"Valid"
 }
-},
-{
-    timestamps:true
+},{
+timestamps:true
 });
 
-
-module.exports = mongoose.model("Booking", bookingSchema);
+module.exports=mongoose.model("Booking",bookingSchema);
