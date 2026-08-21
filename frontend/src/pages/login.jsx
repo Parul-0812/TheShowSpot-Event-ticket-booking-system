@@ -44,7 +44,7 @@ localStorage.setItem("user",JSON.stringify(result.data.user));
 if(returnTo==="/booking"&&event){
 navigate("/booking",{state:{event}});
 }else{
-navigate("/");
+navigate("/dashboard");
 }
 }else{
 alert(result.data.message);

@@ -26,7 +26,7 @@ const loginAdmin = ()=>{
         alert("Admin Login Successful");
 
 
-        navigate("/dashboard");
+        navigate("/admin-dashboard");
 
 
     }
