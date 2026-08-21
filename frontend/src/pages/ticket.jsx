@@ -76,10 +76,7 @@ return(
 
 <div className="qr-section">
 <h3>Scan to Verify Entry</h3>
-<QRCodeCanvas
-value={booking.ticketId}
-size={180}
-/>
+<QRCodeCanvas value={booking.ticketId} size={180}/>
 <p>Ticket ID</p>
 <strong>{booking.ticketId}</strong>
 </div>

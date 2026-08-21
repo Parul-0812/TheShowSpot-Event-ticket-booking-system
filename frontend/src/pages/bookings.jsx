@@ -70,6 +70,13 @@ if(selectedSeats.length===0){
 alert("Please select at least one seat");
 return;
 }
+
+if(!user){
+alert("Please login before booking");
+navigate("/login");
+return;
+}
+
 navigate("/payment",{
 state:{
 eventName:event.name,
@@ -77,7 +84,8 @@ eventDate:event.date,
 eventLocation:event.location,
 seats:selectedSeats,
 amount:total,
-user:user?.name||"Guest"
+user:user.name,
+userId:user._id
 }
 });
 };

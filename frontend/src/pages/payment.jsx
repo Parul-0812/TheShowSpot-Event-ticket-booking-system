@@ -193,11 +193,11 @@ setTimeout(async()=>{
 try{
 const bookingData={
 ...booking,
+userId:booking.userId,
 paymentMethod:method,
 paymentStatus:"Successful",
 transactionId
 };
-
 const bookingResult=await axios.post(
 "http://localhost:5000/booking/confirm",
 bookingData

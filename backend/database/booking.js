@@ -1,6 +1,10 @@
 const mongoose=require("mongoose");
 
 const bookingSchema=new mongoose.Schema({
+userId:{
+type:mongoose.Schema.Types.ObjectId,
+ref:"User"
+},
 user:{
 type:String
 },
@@ -33,7 +37,16 @@ type:String
 },
 ticketStatus:{
 type:String,
+enum:["Valid","Used","Cancelled"],
 default:"Valid"
+},
+usedAt:{
+type:Date,
+default:null
+},
+cancelledAt:{
+type:Date,
+default:null
 }
 },{
 timestamps:true
