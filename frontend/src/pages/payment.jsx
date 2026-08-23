@@ -3,13 +3,14 @@ import {useLocation,useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../styles/payment.css";
 import Navbar from "../components/navbar";
-import Footer from "../components/footer";
+import Footer from "../components/Footer";
 
 function Payment(){
 
 const location=useLocation();
 const navigate=useNavigate();
 const booking=location.state;
+const user=JSON.parse(localStorage.getItem("user"));
 
 const [method,setMethod]=useState("UPI");
 const [step,setStep]=useState("details");
@@ -193,7 +194,7 @@ setTimeout(async()=>{
 try{
 const bookingData={
 ...booking,
-userId:booking.userId,
+userId:user._id,
 paymentMethod:method,
 paymentStatus:"Successful",
 transactionId

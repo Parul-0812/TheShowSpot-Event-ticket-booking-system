@@ -37,30 +37,25 @@ res.json({
     }
 
 })
+router.get("/user/:userId",async(req,res)=>{
+try{
+const bookings=await Booking.find({
+userId:req.params.userId
+}).sort({createdAt:-1});
 
-router.get("/all", async(req,res)=>{
-
-    try{
-
-        const bookings = await Booking.find();
-
-
-        res.json({
-            success:true,
-            data:bookings
-        })
-
-    }
-    catch(error){
-
-        res.json({
-            success:false,
-            message:"Unable to fetch bookings"
-        })
-
-    }
-
-})
+res.json({
+success:true,
+data:bookings
+});
+}
+catch(error){
+console.log(error);
+res.json({
+success:false,
+message:"Unable to fetch user bookings"
+});
+}
+});
 
 router.post("/bookedSeats", async (req, res) => {
 
