@@ -36,6 +36,10 @@ onClick={()=>navigate("/")}
 📋 My Bookings
 </NavLink>
 
+<NavLink to="/settings">
+⚙️ Settings
+</NavLink>
+
 </nav>
 
 <div className="sidebar-bottom">

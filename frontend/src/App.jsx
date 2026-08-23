@@ -16,6 +16,7 @@ import Features from "./pages/Features";
 import Organizer from "./pages/Organizer";
 import UserDashboard from "./pages/userDashboard";
 import MyTickets from "./pages/myTickets";
+import Settings from "./pages/settings";
 
 function App(){
 return(
@@ -38,6 +39,7 @@ return(
 <Route path="/notifications" element={<Notifications/>}/>
 <Route path="/features" element={<Features/>}/>
 <Route path="/myTickets" element={<MyTickets/>}/>
+<Route path="/settings" element={<Settings/>}/>
 </Routes>
 );
 }
