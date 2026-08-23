@@ -9,15 +9,14 @@ function homepage(){
 const [city,setCity] = useState("Select City");
 
 const [showCity,setShowCity] = useState(false);
-const login = localStorage.getItem("isLoggedIn");
+const login=localStorage.getItem("isLoggedIn");
+const user=JSON.parse(localStorage.getItem("user"));
+const [showProfile,setShowProfile]=useState(false);
 
-
-const logout = ()=>{
-
-    localStorage.removeItem("isLoggedIn");
-
-    navigate("/login");
-
+const logout=()=>{
+localStorage.removeItem("isLoggedIn");
+localStorage.removeItem("user");
+navigate("/login");
 }
 
     return(
@@ -103,99 +102,137 @@ setShowCity(false);
     </div>
 }
 {/* <!-- Navigation Bar --> */}
-
 <header>
 
-    <nav className="navbar">
+<nav className="navbar">
 
-        <Link to="/" className="logo">
-
+<Link to="/" className="logo">
 🎟️ TheShowSpot
-
 </Link>
 
+<div className="nav-right">
 
-        
-
-        <div className="nav-right">
-
-            <p 
+<p
 className="selected-city"
 onClick={()=>setShowCity(true)}
 >
-
 {city}
-
 </p>
 
-        {
-
-login
-
-?
-
+{login?
 <>
-
-<Link to="/myBookings">
-
+{/* <Link to="/myBookings">
 <button className="login-btn">
 My Tickets
 </button>
-
-</Link>
-
+</Link> */}
 
 <Link to="/notifications">
-
 <button className="login-btn">
 🔔
 </button>
-
 </Link>
 
+<div className="home-profile-wrapper">
 
-<button 
-className="login-btn"
-onClick={logout}
+<button
+className="home-profile-btn"
+onClick={()=>setShowProfile(!showProfile)}
 >
+<span className="home-profile-avatar">
+{user?.name?.charAt(0).toUpperCase()||"U"}
+</span>
 
-Logout
+<span className="home-profile-name">
+{user?.name||"User"}
+</span>
 
+<span className="home-profile-arrow">
+⌄
+</span>
 </button>
 
+{showProfile&&(
+<div className="home-profile-dropdown">
+
+<div className="home-profile-header">
+
+<div className="home-profile-avatar large">
+{user?.name?.charAt(0).toUpperCase()||"U"}
+</div>
+
+<div>
+<strong>{user?.name||"User"}</strong>
+<p>{user?.email||""}</p>
+</div>
+
+</div>
+
+<div className="home-profile-divider"></div>
+
+<button
+onClick={()=>{
+setShowProfile(false);
+navigate("/dashboard");
+}}
+>
+📊 My Dashboard
+</button>
+
+<button
+onClick={()=>{
+setShowProfile(false);
+navigate("/myBookings");
+}}
+>
+🎟️ My Tickets
+</button>
+
+
+<div className="home-profile-divider"></div>
+
+<button
+className="home-profile-logout"
+onClick={logout}
+>
+🚪 Logout
+</button>
+
+</div>
+)}
+
+</div>
 
 </>
 
-
 :
 
-
 <Link to="/login">
-
 <button className="login-btn">
 Login
 </button>
-
 </Link>
 
-
 }
-        </div>
-    </nav>
 
-    <div className="page-navbar">
-    
-        <Link to="/">Home</Link>
-    
-        <Link to="/events">Events</Link>
-        <Link to="/organizer">Host Your Event</Link>
-    
-        <Link to="/features" className="nav-link">
-            Features
-        </Link>
-    
-    </div>
-    
+</div>
+
+</nav>
+
+<div className="page-navbar">
+
+<Link to="/">Home</Link>
+
+<Link to="/events">Events</Link>
+
+<Link to="/organizer">Host Your Event</Link>
+
+<Link to="/features" className="nav-link">
+Features
+</Link>
+
+</div>
+
 </header>
 
     {/* <!-- Homepage sections will start below this later --> */}

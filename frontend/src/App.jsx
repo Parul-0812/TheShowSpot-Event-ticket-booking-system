@@ -15,6 +15,7 @@ import HostEvent from "./pages/HostEvent";
 import Features from "./pages/Features";
 import Organizer from "./pages/Organizer";
 import UserDashboard from "./pages/userDashboard";
+import MyTickets from "./pages/myTickets";
 
 function App(){
 return(
@@ -36,6 +37,7 @@ return(
 <Route path="/organizer" element={<Organizer/>}/>
 <Route path="/notifications" element={<Notifications/>}/>
 <Route path="/features" element={<Features/>}/>
+<Route path="/myTickets" element={<MyTickets/>}/>
 </Routes>
 );
 }

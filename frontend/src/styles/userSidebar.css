@@ -8,50 +8,75 @@ background:#171717;
 color:white;
 display:flex;
 flex-direction:column;
-z-index:100;
+z-index:1000;
 }
-.user-sidebar-logo{
+
+.user-logo{
+padding:25px 20px;
 font-size:20px;
 font-weight:700;
-padding:25px 20px;
+border:none;
 border-bottom:1px solid #303030;
+background:none;
+color:white;
+text-align:left;
+cursor:pointer;
 }
+
+.user-logo:hover{
+background:#202020;
+}
+
 .user-sidebar nav{
 display:flex;
 flex-direction:column;
+gap:5px;
 padding:20px 12px;
-gap:6px;
 }
+
 .user-sidebar nav a{
-color:#bbb;
-text-decoration:none;
-padding:13px 14px;
+padding:13px 15px;
 border-radius:8px;
+color:#aaa;
+text-decoration:none;
 font-size:15px;
 transition:.2s;
 }
+
 .user-sidebar nav a:hover,
 .user-sidebar nav a.active{
-background:#2c2c2c;
+background:#303030;
 color:white;
 }
-.user-sidebar-bottom{
+
+.sidebar-bottom{
 margin-top:auto;
 padding:15px 12px;
 border-top:1px solid #303030;
+display:flex;
+flex-direction:column;
+gap:5px;
 }
-.user-sidebar-bottom button{
+
+.discover-button,
+.sidebar-logout{
 width:100%;
-padding:13px;
+padding:13px 15px;
 border:0;
 border-radius:8px;
 background:transparent;
-color:#bbb;
+color:#aaa;
 text-align:left;
 font-size:15px;
 cursor:pointer;
 }
-.user-sidebar-bottom button:hover{
-background:#2c2c2c;
+
+.discover-button:hover{
+background:#303030;
 color:white;
+}
+
+.sidebar-logout:hover{
+background:#303030;
+color:#ff5968;
 }

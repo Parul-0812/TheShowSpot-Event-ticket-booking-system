@@ -1,32 +1,62 @@
 import React from "react";
-import {NavLink} from "react-router-dom";
+import {NavLink,useNavigate} from "react-router-dom";
 import "../styles/userSidebar.css";
 
 function UserSidebar(){
 
-return(
-<div className="user-sidebar">
-<div className="user-sidebar-logo">
-🎟️ TheShowSpot
-</div>
+const navigate=useNavigate();
 
-<nav>
-<NavLink to="/dashboard">🏠 Dashboard</NavLink>
-<NavLink to="/my-tickets">🎟️ My Tickets</NavLink>
-<NavLink to="/my-bookings">📋 My Bookings</NavLink>
-<NavLink to="/settings">⚙️ Settings</NavLink>
-</nav>
-
-<div className="user-sidebar-bottom">
-<button onClick={()=>{
+const logout=()=>{
 localStorage.removeItem("isLoggedIn");
 localStorage.removeItem("user");
-window.location.href="/login";
-}}>
+navigate("/login");
+};
+
+return(
+<aside className="user-sidebar">
+
+<button
+className="user-logo"
+onClick={()=>navigate("/")}
+>
+🎟️ TheShowSpot
+</button>
+
+<nav>
+
+<NavLink to="/dashboard">
+🏠 Dashboard
+</NavLink>
+
+<NavLink to="/myTickets">
+🎟️ My Tickets
+</NavLink>
+
+<NavLink to="/myBookings">
+📋 My Bookings
+</NavLink>
+
+</nav>
+
+<div className="sidebar-bottom">
+
+<button
+className="discover-button"
+onClick={()=>navigate("/events")}
+>
+🔍 Discover Events
+</button>
+
+<button
+className="sidebar-logout"
+onClick={logout}
+>
 🚪 Logout
 </button>
+
 </div>
-</div>
+
+</aside>
 );
 }
 

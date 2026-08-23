@@ -7,25 +7,53 @@ function UserNavbar(){
 const navigate=useNavigate();
 const user=JSON.parse(localStorage.getItem("user"));
 
+const firstLetter=user?.name
+?user.name.charAt(0).toUpperCase()
+:"U";
+
 return(
-<div className="user-navbar">
-<div className="user-navbar-title">
-My Dashboard
+<header className="user-navbar">
+
+<div className="dashboard-title">
+<button
+className="home-button"
+onClick={()=>navigate("/")}
+>
+← Home
+</button>
+<h2>My Dashboard</h2>
 </div>
 
 <div className="user-navbar-right">
-<button className="notification-button">
+
+<button
+className="notification-button"
+onClick={()=>navigate("/notifications")}
+title="Notifications"
+>
 🔔
 </button>
 
-<button className="user-profile-button" onClick={()=>navigate("/dashboard")}>
+<button
+className="user-profile"
+onClick={()=>navigate("/dashboard")}
+title="My Dashboard"
+>
+
 <div className="user-avatar">
-{user?.name?.charAt(0).toUpperCase()||"U"}
+{firstLetter}
 </div>
-<span>{user?.name||"User"}</span>
+
+<div className="user-profile-info">
+<strong>{user?.name||"User"}</strong>
+<span>My Profile</span>
+</div>
+
 </button>
+
 </div>
-</div>
+
+</header>
 );
 }
 
