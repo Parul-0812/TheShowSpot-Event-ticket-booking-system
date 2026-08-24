@@ -169,7 +169,7 @@ result.data.orderStatus==="ACTIVE"
 ){
 
 setError(
-"Payment is still pending. Please wait and try again."
+"Payment is still pending. Please wait or try again."
 );
 
 setProcessing(false);
@@ -188,7 +188,7 @@ setStep("details");
 
 }catch(error){
 
-console.log("Payment status error:",error);
+console.log("Payment Status Error:",error);
 
 setError(
 "Unable to verify the payment status."
