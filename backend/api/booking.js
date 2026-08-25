@@ -1,30 +1,72 @@
 const express = require("express");
+const axios = require("axios");
 const router = express.Router();
 const Booking = require("../database/booking");
+
+const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID;
+const CASHFREE_SECRET_KEY = process.env.CASHFREE_SECRET_KEY;
+const CASHFREE_API_URL = "https://sandbox.cashfree.com/pg";
+const CASHFREE_API_VERSION = "2025-01-01";
 
 router.post("/confirm", async (req, res) => {
     try {
         const {
             eventName,
+            eventDate,
+            eventLocation,
             seats,
+            amount,
             userId,
             transactionId,
-            paymentStatus
+            paymentMethod
         } = req.body;
 
-        if (!eventName || !seats || !userId || !transactionId) {
+        if (
+            !eventName ||
+            !eventDate ||
+            !eventLocation ||
+            !seats ||
+            !userId ||
+            !transactionId
+        ) {
             return res.status(400).json({
                 success: false,
                 message: "Missing booking details"
             });
         }
 
-        if (paymentStatus !== "Successful") {
+        // ================= VERIFY CASHFREE PAYMENT =================
+
+        const cashfreeResponse = await axios.get(
+            `${CASHFREE_API_URL}/orders/${transactionId}`,
+            {
+                headers: {
+                    "x-client-id": CASHFREE_APP_ID,
+                    "x-client-secret": CASHFREE_SECRET_KEY,
+                    "x-api-version": CASHFREE_API_VERSION,
+                    "Accept": "application/json"
+                }
+            }
+        );
+
+        const cashfreeStatus = cashfreeResponse.data.order_status;
+
+        console.log(
+            "Cashfree Order:",
+            transactionId,
+            "Status:",
+            cashfreeStatus
+        );
+
+        if (cashfreeStatus !== "PAID") {
             return res.status(400).json({
                 success: false,
-                message: "Payment has not been completed"
+                message: "Payment has not been completed",
+                paymentStatus: cashfreeStatus
             });
         }
+
+        // ================= CHECK DUPLICATE PAYMENT =================
 
         const existingBooking = await Booking.findOne({
             transactionId: transactionId
@@ -37,6 +79,8 @@ router.post("/confirm", async (req, res) => {
                 ticketId: existingBooking._id
             });
         }
+
+        // ================= CHECK SEAT AVAILABILITY =================
 
         const existingBookings = await Booking.find({
             eventName: eventName
@@ -59,7 +103,20 @@ router.post("/confirm", async (req, res) => {
             });
         }
 
-        const booking = new Booking(req.body);
+        // ================= CREATE BOOKING =================
+
+        const booking = new Booking({
+            userId: userId,
+            eventName: eventName,
+            eventDate: eventDate,
+            eventLocation: eventLocation,
+            seats: seats,
+            amount: amount,
+            paymentMethod: paymentMethod || "Cashfree",
+            paymentStatus: "Successful",
+            transactionId: transactionId,
+            ticketStatus: "Valid"
+        });
 
         await booking.save();
 
@@ -68,13 +125,19 @@ router.post("/confirm", async (req, res) => {
             message: "Booking Confirmed",
             ticketId: booking._id
         });
-    }
-    catch (error) {
-        console.log("Booking Confirmation Error:", error);
+
+    } catch (error) {
+        console.log("Booking Confirmation Error:");
+
+        if (error.response) {
+            console.log(error.response.data);
+        } else {
+            console.log(error.message);
+        }
 
         res.status(500).json({
             success: false,
-            message: "Booking Failed"
+            message: "Unable to confirm booking"
         });
     }
 });
@@ -89,8 +152,7 @@ router.get("/user/:userId", async (req, res) => {
             success: true,
             data: bookings
         });
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
 
         res.status(500).json({
@@ -103,8 +165,6 @@ router.get("/user/:userId", async (req, res) => {
 router.post("/bookedSeats", async (req, res) => {
     try {
         const { eventName } = req.body;
-
-        console.log("Received Event Name:", eventName);
 
         const bookings = await Booking.find({
             eventName: eventName
@@ -119,14 +179,12 @@ router.post("/bookedSeats", async (req, res) => {
             ];
         });
 
-        console.log("Booked Seats:", bookedSeats);
-
         res.json({
             success: true,
             bookedSeats
         });
-    }
-    catch (error) {
+
+    } catch (error) {
         console.log(error);
 
         res.status(500).json({
@@ -164,8 +222,8 @@ router.post("/verify", async (req, res) => {
             success: true,
             message: "Entry Allowed ✅"
         });
-    }
-    catch (error) {
+
+    } catch (error) {
         console.log(error);
 
         res.status(500).json({
