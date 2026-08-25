@@ -8,7 +8,8 @@ const bookingApi=require("./api/booking");
 const eventRoute=require("./api/events");
 const eventRequestApi=require("./api/eventRequest");
 const paymentRoutes=require("./api/payment");
-
+const adminApi=require("./api/admin");
+const adminRoutes=require("./api/admin");
 const app=express();
 
 app.use(cors());
@@ -20,7 +21,8 @@ req.rawBody=buf.toString();
 }
 }
 }));
-
+app.use("/admin",adminApi);
+app.use("/admin",adminRoutes);
 app.use("/uploads",express.static(path.join(__dirname,"uploads")));
 app.use("/user",userApi);
 app.use("/booking",bookingApi);
