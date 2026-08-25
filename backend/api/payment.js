@@ -3,11 +3,17 @@ const crypto=require("crypto");
 const Razorpay=require("razorpay");
 const router=express.Router();
 const Booking=require("../database/booking");
+console.log("RAZORPAY KEY ID:",process.env.RAZORPAY_KEY_ID);
+console.log("RAZORPAY SECRET EXISTS:",!!process.env.RAZORPAY_KEY_SECRET);
+console.log("RAZORPAY SECRET LENGTH:",process.env.RAZORPAY_KEY_SECRET?.length);
+console.log("RAZORPAY KEY ID:",process.env.RAZORPAY_KEY_ID);
 
-const razorpay=new Razorpay({
+function getRazorpay(){
+return new Razorpay({
 key_id:process.env.RAZORPAY_KEY_ID,
 key_secret:process.env.RAZORPAY_KEY_SECRET
 });
+}
 
 function getPaymentMethod(payment){
 if(!payment)return"Razorpay";
@@ -77,6 +83,7 @@ message:`These seats are already booked: ${unavailableSeats.join(", ")}`
 
 const internalReceipt=`TSS_${Date.now()}_${Math.floor(Math.random()*10000)}`;
 
+const razorpay=getRazorpay();
 const razorpayOrder=await razorpay.orders.create({
 amount:Math.round(numericAmount*100),
 currency:"INR",
@@ -173,7 +180,7 @@ success:false,
 message:"Payment verification failed"
 });
 }
-
+const razorpay=getRazorpay();
 const payment=await razorpay.payments.fetch(razorpay_payment_id);
 
 if(payment.order_id!==booking.transactionId){
@@ -243,7 +250,7 @@ success:false,
 message:"Booking not found"
 });
 }
-
+const razorpay=getRazorpay();
 const order=await razorpay.orders.fetch(razorpayOrderId);
 
 res.json({
