@@ -70,14 +70,21 @@ const newOrderId=`TSS_${Date.now()}`;
 setOrderId(newOrderId);
 setPaymentStatus("Creating secure payment order...");
 
-const result=await axios.post("http://localhost:5000/payment/create-cashfree-order",{
+const result=await axios.post(
+"http://localhost:5000/payment/create-cashfree-order",
+{
 orderId:newOrderId,
 amount:totalAmount,
 customerId:user._id,
 customerName:user.name,
 customerEmail:user.email,
-customerPhone:user.phone||"9999999999"
-});
+customerPhone:user.phone,
+eventName:booking.eventName,
+eventDate:booking.eventDate,
+eventLocation:booking.eventLocation,
+seats:booking.seats
+}
+);
 
 if(!result.data.success||!result.data.paymentSessionId){
 throw new Error(result.data.message||"Unable to create payment order");
@@ -87,7 +94,7 @@ setPaymentStatus("Opening secure checkout...");
 
 const checkoutResult=await cashfree.checkout({
 paymentSessionId:result.data.paymentSessionId,
-redirectTarget:"_modal"
+redirectTarget:"_self"
 });
 
 console.log("Cashfree Checkout Result:",checkoutResult);
@@ -104,58 +111,43 @@ setPaymentStatus("Verifying payment...");
 await checkPaymentStatus(newOrderId);
 }catch(error){
 console.log("Payment Error:",error);
-setError(error.response?.data?.message||error.message||"Unable to process payment.");
+setError(
+error.response?.data?.message||
+error.message||
+"Unable to process payment."
+);
 setStep("details");
 }
 };
 
 const checkPaymentStatus=async(cashfreeOrderId)=>{
 try{
-const result=await axios.get(`http://localhost:5000/payment/cashfree-status/${cashfreeOrderId}`);
+let attempts=0;
+let result=null;
+
+while(attempts<10){
+result=await axios.get(
+`http://localhost:5000/payment/cashfree-status/${cashfreeOrderId}`
+);
 
 if(!result.data.success){
 throw new Error(result.data.message||"Unable to check payment status");
 }
 
-console.log("Cashfree Order Status:",result.data.orderStatus);
-
 if(result.data.orderStatus==="PAID"){
+break;
+}
+
+if(result.data.orderStatus==="EXPIRED"){
+break;
+}
+
+attempts++;
+await new Promise(resolve=>setTimeout(resolve,2000));
+}
+
+if(result?.data?.orderStatus==="PAID"){
 setPaymentStatus("Payment successful!");
-await confirmBooking(cashfreeOrderId);
-}else if(result.data.orderStatus==="ACTIVE"){
-setError("Payment is still pending. Please try again.");
-setStep("details");
-}else{
-setError("Payment was not completed.");
-setStep("details");
-}
-}catch(error){
-console.log("Payment Status Error:",error);
-setError("Unable to verify payment status.");
-setStep("details");
-}
-};
-
-const confirmBooking=async(cashfreeOrderId)=>{
-try{
-setPaymentStatus("Confirming your booking...");
-
-const bookingData={
-...booking,
-userId:user._id,
-amount:totalAmount,
-paymentMethod:"Cashfree",
-paymentStatus:"Successful",
-transactionId:cashfreeOrderId
-};
-
-const bookingResult=await axios.post("http://localhost:5000/booking/confirm",bookingData);
-
-if(!bookingResult.data.success){
-throw new Error("Booking could not be confirmed.");
-}
-
-setPaymentStatus("Booking confirmed!");
 setStep("success");
 
 setTimeout(()=>{
@@ -166,15 +158,28 @@ eventDate:booking.eventDate,
 eventLocation:booking.eventLocation,
 seats:booking.seats,
 amount:totalAmount,
-ticketId:bookingResult.data.ticketId,
+ticketId:result.data.ticketId,
 transactionId:cashfreeOrderId,
-paymentMethod:"Cashfree"
+paymentMethod:result.data.paymentMethod||"Cashfree"
 }
 });
 },2000);
+
+return;
+}
+
+if(result?.data?.orderStatus==="ACTIVE"){
+setError("Payment is still pending. Please try again.");
+}else if(result?.data?.orderStatus==="EXPIRED"){
+setError("This payment session has expired. Please start again.");
+}else{
+setError("Payment was not completed.");
+}
+
+setStep("details");
 }catch(error){
-console.log("Booking Confirmation Error:",error);
-setError("Payment was successful, but booking confirmation failed.");
+console.log("Payment Status Error:",error);
+setError("Unable to verify payment status.");
 setStep("details");
 }
 };
@@ -200,7 +205,10 @@ return(
 <hr/>
 <h2>Total:<span>₹{totalAmount}</span></h2>
 </div>
-<p className="payment-hint">You will complete your payment securely through Cashfree. UPI, Card and Net Banking options will be available in the secure payment window.</p>
+<p className="payment-hint">
+You will complete your payment securely through Cashfree.
+UPI, Card and Net Banking options are available in the secure payment window.
+</p>
 {error&&<p className="payment-error">{error}</p>}
 <button className="pay-button" onClick={createOrder} disabled={!cashfree}>
 {cashfree?`Proceed to Pay ₹${totalAmount}`:"Loading Payment Gateway..."}
@@ -225,11 +233,24 @@ return(
 <h1>Payment Successful</h1>
 <p>Your payment has been processed successfully.</p>
 <div className="success-details">
-<div><span>Amount Paid</span><strong>₹{totalAmount}</strong></div>
-<div><span>Payment Method</span><strong>Cashfree</strong></div>
-<div><span>Order ID</span><strong>{orderId}</strong></div>
+<div>
+<span>Amount Paid</span>
+<strong>₹{totalAmount}</strong>
 </div>
-<div className="success-message">✓ Booking confirmed<br/>Your ticket is being generated...</div>
+<div>
+<span>Payment Method</span>
+<strong>Cashfree</strong>
+</div>
+<div>
+<span>Order ID</span>
+<strong>{orderId}</strong>
+</div>
+</div>
+<div className="success-message">
+✓ Booking confirmed
+<br/>
+Your ticket is being generated...
+</div>
 </div>
 )}
 </div>

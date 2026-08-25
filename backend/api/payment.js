@@ -1,139 +1,28 @@
 const express=require("express");
 const crypto=require("crypto");
-const axios=require("axios");
+const Razorpay=require("razorpay");
 const router=express.Router();
 const Booking=require("../database/booking");
 
-const CASHFREE_APP_ID=process.env.CASHFREE_APP_ID;
-const CASHFREE_SECRET_KEY=process.env.CASHFREE_SECRET_KEY;
-const CASHFREE_API_URL="https://sandbox.cashfree.com/pg";
-const CASHFREE_API_VERSION="2025-01-01";
-
-const cashfreeHeaders={
-"x-client-id":CASHFREE_APP_ID,
-"x-client-secret":CASHFREE_SECRET_KEY,
-"x-api-version":CASHFREE_API_VERSION,
-"Content-Type":"application/json",
-"Accept":"application/json"
-};
-
-const otpStore=new Map();
+const razorpay=new Razorpay({
+key_id:process.env.RAZORPAY_KEY_ID,
+key_secret:process.env.RAZORPAY_KEY_SECRET
+});
 
 function getPaymentMethod(payment){
-if(!payment||!payment.payment_method)return"Cashfree";
-if(payment.payment_method.upi)return"UPI";
-if(payment.payment_method.card)return"Card";
-if(payment.payment_method.netbanking)return"Net Banking";
-if(payment.payment_method.wallet)return"Wallet";
-if(payment.payment_method.app)return"App";
-return payment.payment_group||"Cashfree";
+if(!payment)return"Razorpay";
+if(payment.method==="upi")return"UPI";
+if(payment.method==="card")return"Card";
+if(payment.method==="netbanking")return"Net Banking";
+if(payment.method==="wallet")return"Wallet";
+if(payment.method==="emi")return"EMI";
+if(payment.method==="bank_transfer")return"Bank Transfer";
+return payment.method||"Razorpay";
 }
 
-async function finalizePaidOrder(orderId,paymentData=null){
-const booking=await Booking.findOne({transactionId:orderId});
-
-if(!booking){
-return{success:false,message:"Booking not found for this payment order"};
-}
-
-if(booking.paymentStatus==="Successful"){
-return{success:true,alreadyProcessed:true,ticketId:booking._id,paymentMethod:booking.paymentMethod};
-}
-
-if(paymentData){
-if(paymentData.payment_status!=="SUCCESS"){
-return{success:false,message:"Payment is not successful"};
-}
-
-if(Number(paymentData.payment_amount)!==Number(booking.amount)){
-return{success:false,message:"Payment amount mismatch"};
-}
-
-booking.paymentMethod=getPaymentMethod(paymentData);
-booking.cfPaymentId=String(paymentData.cf_payment_id||"");
-}else{
-const paymentsResponse=await axios.get(
-`${CASHFREE_API_URL}/orders/${orderId}/payments`,
-{headers:cashfreeHeaders}
-);
-
-const successfulPayment=paymentsResponse.data.find(
-payment=>payment.payment_status==="SUCCESS"
-);
-
-if(!successfulPayment){
-return{success:false,message:"Successful payment transaction not found"};
-}
-
-if(Number(successfulPayment.payment_amount)!==Number(booking.amount)){
-return{success:false,message:"Payment amount mismatch"};
-}
-
-booking.paymentMethod=getPaymentMethod(successfulPayment);
-booking.cfPaymentId=String(successfulPayment.cf_payment_id||"");
-}
-
-booking.paymentStatus="Successful";
-booking.ticketStatus="Valid";
-await booking.save();
-
-return{
-success:true,
-alreadyProcessed:false,
-ticketId:booking._id,
-paymentMethod:booking.paymentMethod
-};
-}
-
-router.post("/send-otp",async(req,res)=>{
-try{
-const{paymentId}=req.body;
-if(!paymentId){
-return res.json({success:false,message:"Payment ID is required"});
-}
-const otp=Math.floor(100000+Math.random()*900000).toString();
-otpStore.set(paymentId,{
-otp,
-expires:Date.now()+5*60*1000
-});
-console.log("Payment OTP generated:",otp);
-res.json({success:true,message:"OTP generated successfully"});
-}catch(error){
-console.log(error);
-res.status(500).json({success:false,message:"Unable to generate OTP"});
-}
-});
-
-router.post("/verify-otp",async(req,res)=>{
-try{
-const{paymentId,otp}=req.body;
-const stored=otpStore.get(paymentId);
-
-if(!stored){
-return res.json({success:false,message:"OTP expired or not found"});
-}
-
-if(Date.now()>stored.expires){
-otpStore.delete(paymentId);
-return res.json({success:false,message:"OTP expired. Please request a new OTP."});
-}
-
-if(stored.otp!==otp){
-return res.json({success:false,message:"Incorrect OTP"});
-}
-
-otpStore.delete(paymentId);
-res.json({success:true,message:"OTP verified successfully"});
-}catch(error){
-console.log(error);
-res.status(500).json({success:false,message:"Unable to verify OTP"});
-}
-});
-
-router.post("/create-cashfree-order",async(req,res)=>{
+router.post("/create-razorpay-order",async(req,res)=>{
 try{
 const{
-orderId,
 amount,
 customerId,
 customerName,
@@ -145,7 +34,7 @@ eventLocation,
 seats
 }=req.body;
 
-if(!orderId||!amount||!customerId||!customerName||!customerEmail||!customerPhone){
+if(!amount||!customerId||!customerName||!customerEmail||!customerPhone){
 return res.status(400).json({
 success:false,
 message:"Missing payment details"
@@ -168,24 +57,6 @@ message:"No seats selected"
 });
 }
 
-const existingOrder=await Booking.findOne({transactionId:orderId});
-
-if(existingOrder){
-if(existingOrder.paymentStatus==="Successful"){
-return res.status(409).json({
-success:false,
-message:"This payment has already been completed"
-});
-}
-
-return res.json({
-success:true,
-orderId,
-paymentSessionId:existingOrder.paymentSessionId,
-paymentStatus:existingOrder.paymentStatus
-});
-}
-
 const existingSeats=await Booking.find({
 eventName,
 seats:{$in:seats},
@@ -204,6 +75,19 @@ message:`These seats are already booked: ${unavailableSeats.join(", ")}`
 }
 }
 
+const internalReceipt=`TSS_${Date.now()}_${Math.floor(Math.random()*10000)}`;
+
+const razorpayOrder=await razorpay.orders.create({
+amount:Math.round(numericAmount*100),
+currency:"INR",
+receipt:internalReceipt,
+notes:{
+customer_id:String(customerId),
+event_name:String(eventName),
+seats:seats.join(",")
+}
+});
+
 const booking=new Booking({
 userId:customerId,
 eventName,
@@ -211,153 +95,172 @@ eventDate,
 eventLocation,
 seats,
 amount:numericAmount,
-paymentMethod:"Cashfree",
+paymentMethod:"Razorpay",
 paymentStatus:"Pending",
-transactionId:orderId,
+transactionId:razorpayOrder.id,
 ticketStatus:"Valid"
 });
 
 await booking.save();
 
-try{
-const response=await axios.post(
-`${CASHFREE_API_URL}/orders`,
-{
-order_id:orderId,
-order_amount:numericAmount,
-order_currency:"INR",
-customer_details:{
-customer_id:String(customerId),
-customer_name:customerName,
-customer_email:customerEmail,
-customer_phone:String(customerPhone)
-},
-order_meta:{
-return_url:`http://localhost:5173/payment?order_id=${orderId}`,
-notify_url:process.env.CASHFREE_WEBHOOK_URL||undefined
-}
-},
-{headers:cashfreeHeaders}
-);
+res.json({
+success:true,
+razorpayOrderId:razorpayOrder.id,
+amount:razorpayOrder.amount,
+currency:razorpayOrder.currency,
+keyId:process.env.RAZORPAY_KEY_ID,
+bookingId:booking._id
+});
+}catch(error){
+console.log("Razorpay Create Order Error:",error);
 
-booking.paymentSessionId=response.data.payment_session_id;
+res.status(500).json({
+success:false,
+message:"Unable to create Razorpay payment order"
+});
+}
+});
+
+router.post("/verify-razorpay-payment",async(req,res)=>{
+try{
+const{
+razorpay_payment_id,
+razorpay_order_id,
+razorpay_signature
+}=req.body;
+
+if(!razorpay_payment_id||!razorpay_order_id||!razorpay_signature){
+return res.status(400).json({
+success:false,
+message:"Incomplete payment verification details"
+});
+}
+
+const booking=await Booking.findOne({
+transactionId:razorpay_order_id
+});
+
+if(!booking){
+return res.status(404).json({
+success:false,
+message:"Booking not found for this payment"
+});
+}
+
+if(booking.paymentStatus==="Successful"){
+return res.json({
+success:true,
+message:"Payment already verified",
+ticketId:booking._id,
+paymentMethod:booking.paymentMethod
+});
+}
+
+const generatedSignature=crypto
+.createHmac("sha256",process.env.RAZORPAY_KEY_SECRET)
+.update(`${booking.transactionId}|${razorpay_payment_id}`)
+.digest("hex");
+
+const receivedBuffer=Buffer.from(razorpay_signature);
+const generatedBuffer=Buffer.from(generatedSignature);
+
+if(
+receivedBuffer.length!==generatedBuffer.length||
+!crypto.timingSafeEqual(receivedBuffer,generatedBuffer)
+){
+return res.status(400).json({
+success:false,
+message:"Payment verification failed"
+});
+}
+
+const payment=await razorpay.payments.fetch(razorpay_payment_id);
+
+if(payment.order_id!==booking.transactionId){
+return res.status(400).json({
+success:false,
+message:"Payment order mismatch"
+});
+}
+
+if(Number(payment.amount)!==Math.round(Number(booking.amount)*100)){
+return res.status(400).json({
+success:false,
+message:"Payment amount mismatch"
+});
+}
+
+if(payment.status!=="captured"){
+return res.status(400).json({
+success:false,
+message:`Payment is not captured. Current status: ${payment.status}`
+});
+}
+
+booking.paymentStatus="Successful";
+booking.paymentMethod=getPaymentMethod(payment);
+booking.transactionId=razorpay_order_id;
+
+if(booking.razorpayPaymentId!==undefined){
+booking.razorpayPaymentId=razorpay_payment_id;
+}
+
+if(booking.paymentSignature!==undefined){
+booking.paymentSignature=razorpay_signature;
+}
+
 await booking.save();
 
 res.json({
 success:true,
-orderId:response.data.order_id,
-paymentSessionId:response.data.payment_session_id
+message:"Payment verified successfully",
+ticketId:booking._id,
+paymentMethod:booking.paymentMethod,
+paymentId:razorpay_payment_id,
+orderId:razorpay_order_id
 });
 }catch(error){
-await Booking.deleteOne({_id:booking._id});
-throw error;
-}
-}catch(error){
-console.log("Cashfree Create Order Error:");
-if(error.response){
-console.log(error.response.data);
-}else{
-console.log(error.message);
-}
+console.log("Razorpay Verification Error:",error);
 
 res.status(500).json({
 success:false,
-message:"Unable to create Cashfree payment order",
-error:error.response?.data||error.message
+message:"Unable to verify payment"
 });
 }
 });
 
-router.get("/cashfree-status/:orderId",async(req,res)=>{
+router.get("/razorpay-status/:razorpayOrderId",async(req,res)=>{
 try{
-const{orderId}=req.params;
+const{razorpayOrderId}=req.params;
 
-const response=await axios.get(
-`${CASHFREE_API_URL}/orders/${orderId}`,
-{headers:cashfreeHeaders}
-);
+const booking=await Booking.findOne({
+transactionId:razorpayOrderId
+});
 
-const orderStatus=response.data.order_status;
-
-if(orderStatus==="PAID"){
-const finalized=await finalizePaidOrder(orderId);
-
-return res.json({
-success:true,
-orderStatus,
-orderId,
-amount:response.data.order_amount,
-paymentStatus:"Successful",
-ticketId:finalized.ticketId,
-paymentMethod:finalized.paymentMethod
+if(!booking){
+return res.status(404).json({
+success:false,
+message:"Booking not found"
 });
 }
+
+const order=await razorpay.orders.fetch(razorpayOrderId);
 
 res.json({
 success:true,
-orderStatus,
-orderId,
-amount:response.data.order_amount,
-paymentStatus:"Pending"
+orderId:order.id,
+orderStatus:order.status,
+paymentStatus:booking.paymentStatus,
+amount:order.amount,
+ticketId:booking.paymentStatus==="Successful"?booking._id:null
 });
 }catch(error){
-console.log("Cashfree Status Error:");
-if(error.response){
-console.log(error.response.data);
-}else{
-console.log(error.message);
-}
+console.log("Razorpay Status Error:",error);
 
 res.status(500).json({
 success:false,
-message:"Unable to check Cashfree payment status",
-error:error.response?.data||error.message
+message:"Unable to check payment status"
 });
-}
-});
-
-router.post("/webhook",express.raw({type:"application/json"}),async(req,res)=>{
-try{
-const signature=req.headers["x-webhook-signature"];
-const timestamp=req.headers["x-webhook-timestamp"];
-
-if(!signature||!timestamp){
-return res.status(400).send("Missing webhook signature");
-}
-
-const rawBody=req.body.toString("utf8");
-const expectedSignature=crypto
-.createHmac("sha256",CASHFREE_SECRET_KEY)
-.update(timestamp+rawBody)
-.digest("base64");
-
-if(!crypto.timingSafeEqual(
-Buffer.from(expectedSignature),
-Buffer.from(signature)
-)){
-return res.status(400).send("Invalid webhook signature");
-}
-
-const payload=JSON.parse(rawBody);
-const eventType=payload.type||payload.event_type;
-const orderId=payload.data?.order?.order_id;
-const payment=payload.data?.payment;
-
-console.log("Cashfree Webhook:",eventType,orderId);
-
-if(!orderId){
-return res.status(200).send("Webhook received");
-}
-
-if(payment?.payment_status==="SUCCESS"){
-const result=await finalizePaidOrder(orderId,payment);
-console.log("Payment finalized:",result);
-}
-
-return res.status(200).send("Webhook received");
-}catch(error){
-console.log("Cashfree Webhook Error:",error);
-return res.status(500).send("Webhook processing failed");
 }
 });
 
