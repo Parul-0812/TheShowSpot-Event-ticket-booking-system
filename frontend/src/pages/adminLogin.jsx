@@ -1,57 +1,135 @@
-const loginAdmin=async()=>{
+import React,{useState} from "react";
+import {useNavigate} from "react-router-dom";
+import "../styles/adminLogin.css";
 
-    try{
+function AdminLogin(){
 
-        const response=await fetch(
-            "http://localhost:5000/admin/login",
-            {
-                method:"POST",
+    const navigate=useNavigate();
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+    const [username,setUsername]=useState("");
+    const [password,setPassword]=useState("");
+    const [error,setError]=useState("");
+    const [loading,setLoading]=useState(false);
 
-                body:JSON.stringify({
-                    username,
-                    password
-                })
+    const loginAdmin=async(e)=>{
+        e.preventDefault();
+
+        try{
+
+            setError("");
+
+            if(!username||!password){
+                setError("Please enter your username and password.");
+                return;
             }
-        );
 
-        const result=await response.json();
+            setLoading(true);
 
-        if(!response.ok||!result.success){
-
-            setError(
-                result.message||
-                "Invalid admin credentials"
+            const response=await fetch(
+                "http://localhost:5000/admin/login",
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({
+                        username,
+                        password
+                    })
+                }
             );
 
-            return;
+            const result=await response.json();
+
+            if(!response.ok||!result.success){
+                setError(
+                    result.message||
+                    "Invalid admin credentials."
+                );
+                return;
+            }
+
+            localStorage.setItem("admin","true");
+
+            localStorage.setItem(
+                "adminUser",
+                JSON.stringify(result.admin)
+            );
+
+            navigate("/admin-dashboard");
 
         }
+        catch(error){
 
-        localStorage.setItem(
-            "admin",
-            "true"
-        );
+            console.log("Admin Login Error:",error);
 
-        localStorage.setItem(
-            "adminUser",
-            JSON.stringify(result.admin)
-        );
+            setError(
+                "Unable to connect to the server. Please try again."
+            );
 
-        navigate("/admin-dashboard");
+        }
+        finally{
+            setLoading(false);
+        }
+    };
 
-    }
-    catch(error){
+    return(
+        <div className="admin-container">
 
-        console.log(error);
+            <div className="admin-box">
 
-        setError(
-            "Unable to connect to the server."
-        );
+                <h1>Admin Login</h1>
 
-    }
+                <p>
+                    Sign in to manage TheShowSpot
+                </p>
 
-};
+                <form onSubmit={loginAdmin}>
+
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e)=>{
+                            setUsername(e.target.value);
+                            setError("");
+                        }}
+                        autoComplete="username"
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e)=>{
+                            setPassword(e.target.value);
+                            setError("");
+                        }}
+                        autoComplete="current-password"
+                    />
+
+                    {error&&(
+                        <div className="admin-login-error">
+                            {error}
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading
+                            ?"Signing In..."
+                            :"Login"
+                        }
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+    );
+}
+
+export default AdminLogin;
