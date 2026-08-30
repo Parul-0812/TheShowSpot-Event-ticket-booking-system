@@ -56,6 +56,7 @@ router.get("/stats",async(req,res)=>{
             rejectedEvents,
             successfulBookings,
             pendingBookings,
+            usedTickets,
             revenueResult,
             bookingActivity,
             requestStats,
@@ -94,6 +95,9 @@ router.get("/stats",async(req,res)=>{
             Booking.countDocuments({
                 paymentStatus:"Pending"
             }),
+            Booking.countDocuments({
+    ticketStatus:"Used"
+}),
 
             Booking.aggregate([
                 {
@@ -265,9 +269,10 @@ router.get("/stats",async(req,res)=>{
                     rejected:rejectedEvents
                 },
                 bookings:{
-                    successful:successfulBookings,
-                    pending:pendingBookings
-                },
+    successful:successfulBookings,
+    pending:pendingBookings,
+    used:usedTickets
+},
                 revenue,
                 requests,
                 bookingActivity:

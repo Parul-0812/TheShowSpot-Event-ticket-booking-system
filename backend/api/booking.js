@@ -116,47 +116,70 @@ message:"Error fetching seats"
 });
 }
 });
-
 router.post("/verify",async(req,res)=>{
-try{
-const{ticketId}=req.body;
-const ticket=await Booking.findById(ticketId);
+    try{
+        const {ticketId}=req.body;
 
-if(!ticket){
-return res.json({
-success:false,
-message:"Fake Ticket ❌"
-});
-}
+        if(!ticketId){
+            return res.json({
+                success:false,
+                message:"Ticket ID is required ❌"
+            });
+        }
 
-if(ticket.paymentStatus!=="Successful"){
-return res.json({
-success:false,
-message:"Payment not completed ❌"
-});
-}
+        const ticket=await Booking.findById(ticketId);
 
-if(ticket.ticketStatus==="Used"){
-return res.json({
-success:false,
-message:"Ticket Already Used ❌"
-});
-}
+        if(!ticket){
+            return res.json({
+                success:false,
+                message:"Fake Ticket ❌"
+            });
+        }
 
-ticket.ticketStatus="Used";
-await ticket.save();
+        if(ticket.paymentStatus!=="Successful"){
+            return res.json({
+                success:false,
+                message:"Payment not completed ❌"
+            });
+        }
 
-res.json({
-success:true,
-message:"Entry Allowed ✅"
-});
-}catch(error){
-console.log(error);
-res.json({
-success:false,
-message:"Verification Failed"
-});
-}
-});
+        const verifiedTicket=await Booking.findOneAndUpdate(
+            {
+                _id:ticketId,
+                paymentStatus:"Successful",
+                ticketStatus:{
+                    $ne:"Used"
+                }
+            },
+            {
+                $set:{
+                    ticketStatus:"Used"
+                }
+            },
+            {
+                new:true
+            }
+        );
 
+        if(!verifiedTicket){
+            return res.json({
+                success:false,
+                message:"Ticket Already Used ❌"
+            });
+        }
+
+        res.json({
+            success:true,
+            message:"Entry Allowed ✅"
+        });
+    }
+    catch(error){
+        console.log("Ticket Verification Error:",error);
+
+        res.status(500).json({
+            success:false,
+            message:"Verification Failed"
+        });
+    }
+});
 module.exports=router;

@@ -17,6 +17,9 @@ function AdminDashboard(){
     const [bookingSearch,setBookingSearch]=useState("");
     const [userSearch,setUserSearch]=useState("");
     const [requestFilter,setRequestFilter]=useState("All");
+    const [ticketId,setTicketId]=useState("");
+    const [verificationLoading,setVerificationLoading]=useState(false);
+    const [verificationResult,setVerificationResult]=useState(null);
     const [showEventModal,setShowEventModal]=useState(false);
     const [editingEvent,setEditingEvent]=useState(null);
     const [eventForm,setEventForm]=useState({
@@ -118,6 +121,61 @@ function AdminDashboard(){
         setTimeout(()=>{
             setNotice("");
         },3000);
+    };
+    const verifyTicket=async()=>{
+        const trimmedTicketId=ticketId.trim();
+
+        if(!trimmedTicketId){
+            setVerificationResult({
+                success:false,
+                message:"Please enter a ticket ID."
+            });
+            return;
+        }
+
+        try{
+            setVerificationLoading(true);
+            setVerificationResult(null);
+
+            const response=await fetch(
+                `${api}/booking/verify`,
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({
+                        ticketId:trimmedTicketId
+                    })
+                }
+            );
+
+            const result=await response.json();
+
+            setVerificationResult({
+                success:result.success,
+                message:result.message||"Verification failed."
+            });
+
+            if(result.success){
+                setTicketId("");
+                await Promise.all([
+                    fetchBookings(),
+                    fetchStats()
+                ]);
+                showNotice("Ticket verified successfully. Entry allowed.");
+            }
+        }
+        catch(error){
+            console.log(error);
+            setVerificationResult({
+                success:false,
+                message:"Unable to verify ticket. Please try again."
+            });
+        }
+        finally{
+            setVerificationLoading(false);
+        }
     };
     const logout=()=>{
         localStorage.removeItem("admin");
@@ -481,6 +539,9 @@ function AdminDashboard(){
                 total+item.revenue,
             0
         )||0;
+    const usedTicketCount=bookings.filter(
+        booking=>booking.ticketStatus==="Used"
+    ).length;
     if(loading&&!data){
         return(
             <div className="admin-loading-screen">
@@ -840,6 +901,63 @@ function AdminDashboard(){
                                         View Bookings
                                     </button>
                                 </div>
+                            </section>
+                            <section className="dashboard-panel ticket-verification-panel">
+                                <div className="panel-header">
+                                    <div>
+                                        <span className="section-label">
+                                            TICKET VERIFICATION
+                                        </span>
+                                        <h3>
+                                            Verify Ticket
+                                        </h3>
+                                        <p>
+                                            Enter the ticket ID to verify entry. A ticket can only be used once.
+                                        </p>
+                                    </div>
+                                    <div className="verification-used-count">
+                                        <span>Used Tickets</span>
+                                        <strong>{usedTicketCount}</strong>
+                                    </div>
+                                </div>
+                                <div className="filter-bar ticket-verification-form">
+                                    <input
+                                        value={ticketId}
+                                        onChange={e=>{
+                                            setTicketId(e.target.value);
+                                            setVerificationResult(null);
+                                        }}
+                                        onKeyDown={e=>{
+                                            if(e.key==="Enter"){
+                                                verifyTicket();
+                                            }
+                                        }}
+                                        placeholder="Enter ticket ID..."
+                                        disabled={verificationLoading}
+                                    />
+                                    <button
+                                        className="primary-action"
+                                        onClick={verifyTicket}
+                                        disabled={verificationLoading}
+                                    >
+                                        {verificationLoading
+                                            ?"Verifying..."
+                                            :"Verify Ticket"
+                                        }
+                                    </button>
+                                </div>
+                                {verificationResult&&
+                                    <div
+                                        className={
+                                            verificationResult.success
+                                                ?"ticket-verification-result success"
+                                                :"ticket-verification-result error"
+                                        }
+                                    >
+                                        {verificationResult.success?"✓":"✕"}
+                                        {verificationResult.message}
+                                    </div>
+                                }
                             </section>
                             <section className="analytics-grid">
                                 <div className="dashboard-panel chart-panel">
@@ -1473,6 +1591,7 @@ function AdminDashboard(){
                                             <th>Seats</th>
                                             <th>Amount</th>
                                             <th>Payment</th>
+                                            <th>Ticket Status</th>
                                             <th>Date</th>
                                         </tr>
                                     </thead>
@@ -1486,8 +1605,11 @@ function AdminDashboard(){
                                                             "Event"}
                                                         </strong>
                                                         <small>
+                                                            Ticket ID: {booking._id}
+                                                        </small>
+                                                        <small>
                                                             {booking.transactionId||
-                                                            booking._id}
+                                                            "No transaction ID"}
                                                         </small>
                                                     </td>
                                                     <td>
@@ -1520,6 +1642,24 @@ function AdminDashboard(){
                                                             }
                                                         >
                                                             {booking.paymentStatus}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            className={
+                                                                `status-pill ${
+                                                                    booking.paymentStatus!=="Successful"
+                                                                        ?"pending"
+                                                                        :booking.ticketStatus==="Used"
+                                                                        ?"used"
+                                                                        :"approved"
+                                                                }`
+                                                            }
+                                                        >
+                                                            {booking.paymentStatus!=="Successful"
+                                                                ?"—"
+                                                                :booking.ticketStatus||"Valid"
+                                                            }
                                                         </span>
                                                     </td>
                                                     <td>

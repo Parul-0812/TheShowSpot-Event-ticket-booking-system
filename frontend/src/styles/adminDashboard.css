@@ -295,9 +295,26 @@
 
 .stats-grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(5,1fr);
     gap:18px;
     margin-bottom:20px;
+}
+@media(max-width:1200px){
+    .stats-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:800px){
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:520px){
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
 }
 
 .stat-card{
@@ -1862,5 +1879,104 @@ td small{
 
     .stats-grid{
         grid-template-columns:1fr;
+    }
+}
+.ticket-verification-panel{
+    background:#ffffff;
+    border:1px solid #ececf2;
+    border-radius:18px;
+    padding:28px;
+    margin-top:24px;
+    box-shadow:0 8px 30px rgba(30,20,60,0.05);
+}
+
+.verification-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.verification-header h3{
+    margin:6px 0;
+    font-size:22px;
+}
+
+.verification-header p{
+    margin:0;
+    color:#7b7b8c;
+}
+
+.verification-icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eefaf4;
+    color:#15945b;
+    font-size:24px;
+    font-weight:700;
+}
+
+.verification-form{
+    display:flex;
+    gap:12px;
+    margin-top:22px;
+}
+
+.verification-form input{
+    flex:1;
+    min-width:0;
+    height:48px;
+    padding:0 16px;
+    border:1px solid #dedee7;
+    border-radius:10px;
+    outline:none;
+    font-size:14px;
+    background:#fafafd;
+}
+
+.verification-form input:focus{
+    border-color:#8b5cf6;
+    background:#ffffff;
+}
+
+.verification-form button{
+    white-space:nowrap;
+}
+
+.verification-form button:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+.verification-help{
+    margin-top:14px;
+    font-size:13px;
+    color:#858595;
+}
+
+.verification-help strong{
+    color:#15945b;
+}
+
+.ticket-status-na{
+    color:#999;
+}
+
+@media(max-width:700px){
+
+    .verification-header{
+        align-items:flex-start;
+    }
+
+    .verification-form{
+        flex-direction:column;
+    }
+
+    .verification-form button{
+        width:100%;
     }
 }
