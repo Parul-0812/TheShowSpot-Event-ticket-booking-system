@@ -13,15 +13,16 @@ const Event = require("../database/events");
 
 const storage = multer.diskStorage({
 
-    destination: function(req, file, cb){
+    destination: function(req, file, cb) {
 
         cb(null, "uploads/");
 
     },
 
-    filename: function(req, file, cb){
+    filename: function(req, file, cb) {
 
-        const uniqueName = Date.now() + path.extname(file.originalname);
+        const uniqueName =
+            Date.now() + path.extname(file.originalname);
 
         cb(null, uniqueName);
 
@@ -33,21 +34,21 @@ const upload = multer({
 
     storage: storage,
 
-    fileFilter: function(req, file, cb){
+    fileFilter: function(req, file, cb) {
 
         const allowed = /jpeg|jpg|png|webp/;
 
-        const ext = allowed.test(path.extname(file.originalname).toLowerCase());
+        const ext = allowed.test(
+            path.extname(file.originalname).toLowerCase()
+        );
 
         const mime = allowed.test(file.mimetype);
 
-        if(ext && mime){
+        if(ext && mime) {
 
             cb(null, true);
 
-        }
-
-        else{
+        } else {
 
             cb(new Error("Only image files are allowed"));
 
@@ -62,67 +63,125 @@ const upload = multer({
 // Submit Event Request
 // ===============================
 
-router.post("/submit", upload.single("image"), async(req,res)=>{
+router.post(
+    "/submit",
+    upload.single("image"),
+    async(req, res) => {
 
-    try{
+        try {
 
-        const request = new EventRequest({
+            const request = new EventRequest({
 
-            name:req.body.name,
+                // Host user
+                userId: req.body.userId,
 
-            category:req.body.category,
+                // Event Information
+                name: req.body.name,
 
-            description:req.body.description,
+                category: req.body.category,
 
-            date:req.body.date,
+                description: req.body.description,
 
-            startTime:req.body.startTime,
+                // Date & Time
+                date: req.body.date,
 
-            endTime:req.body.endTime,
+                startTime: req.body.startTime,
 
-            venue:req.body.venue,
+                endTime: req.body.endTime,
 
-            city:req.body.city,
+                // Venue
+                venue: req.body.venue,
 
-            address:req.body.address,
+                city: req.body.city,
 
-            ticketPrice:req.body.ticketPrice,
+                address: req.body.address,
 
-            totalSeats:req.body.totalSeats,
+                // Ticket Details
+                ticketPrice: Number(req.body.ticketPrice),
 
-            organizerName:req.body.organizerName,
+                totalSeats: Number(req.body.totalSeats),
 
-            email:req.body.email,
+                // Organizer
+                organizerName: req.body.organizerName,
 
-            phone:req.body.phone,
+                email: req.body.email,
 
-            image:req.file ? req.file.filename : "",
+                phone: req.body.phone,
 
-            status:"Pending"
+                // Image
+                image: req.file
+                    ? req.file.filename
+                    : "",
 
-        });
+                // Status
+                status: "Pending"
 
-        await request.save();
+            });
+
+            await request.save();
+
+            res.json({
+
+                success: true,
+
+                message: "Event Submitted Successfully"
+
+            });
+
+        }
+
+        catch(error) {
+
+            console.log(
+                "Event Submission Error:",
+                error
+            );
+
+            res.status(500).json({
+
+                success: false,
+
+                message: "Submission Failed"
+
+            });
+
+        }
+
+    }
+);
+
+
+// ===============================
+// Get All Requests
+// ===============================
+
+router.get("/all", async(req, res) => {
+
+    try {
+
+        const requests =
+            await EventRequest.find()
+            .sort({ createdAt: -1 });
 
         res.json({
 
-            success:true,
+            success: true,
 
-            message:"Event Submitted Successfully"
+            data: requests
 
         });
 
     }
 
-    catch(error){
+    catch(error) {
 
         console.log(error);
 
-        res.status(500).json({
+        res.json({
 
-            success:false,
+            success: false,
 
-            message:"Submission Failed"
+            message: "Unable to Fetch"
 
         });
 
@@ -132,32 +191,41 @@ router.post("/submit", upload.single("image"), async(req,res)=>{
 
 
 // ===============================
-// Get All Requests
+// Get Requests For One User
 // ===============================
 
-router.get("/all", async(req,res)=>{
+router.get("/user/:userId", async(req, res) => {
 
-    try{
+    try {
 
-        const requests = await EventRequest.find();
+        const requests =
+            await EventRequest.find({
+                userId: req.params.userId
+            })
+            .sort({ createdAt: -1 });
 
         res.json({
 
-            success:true,
+            success: true,
 
-            data:requests
+            data: requests
 
         });
 
     }
 
-    catch(error){
+    catch(error) {
 
-        res.json({
+        console.log(
+            "User Event Request Error:",
+            error
+        );
 
-            success:false,
+        res.status(500).json({
 
-            message:"Unable to Fetch"
+            success: false,
+
+            message: "Unable to Fetch User Events"
 
         });
 
@@ -170,67 +238,112 @@ router.get("/all", async(req,res)=>{
 // Approve Request
 // ===============================
 
-router.put("/approve/:id", async(req,res)=>{
+router.put("/approve/:id", async(req, res) => {
 
-    try{
+    try {
 
-        const request = await EventRequest.findById(req.params.id);
+        const request =
+            await EventRequest.findById(req.params.id);
 
-        if(!request){
+        if(!request) {
 
             return res.json({
 
-                success:false,
+                success: false,
 
-                message:"Request Not Found"
+                message: "Request Not Found"
 
             });
 
         }
 
-    const event = new Event({
-    name:request.name,
-    category:request.category,
-    description:request.description,
-    date:request.date,
-    startTime:request.startTime,
-    endTime:request.endTime,
-    venue:request.venue,
-    city:request.city,
-    address:request.address,
-    location:request.city,
-    price:Number(request.ticketPrice),
-    totalSeats:Number(request.totalSeats),
-    image:request.image,
-    organizerName:request.organizerName,
-    email:request.email,
-    phone:request.phone,
-    status:"Approved"
-    });
+        // Prevent approving twice
+        if(request.status === "Approved") {
+
+            return res.json({
+
+                success: false,
+
+                message: "Event Already Approved"
+
+            });
+
+        }
+
+
+        const event = new Event({
+
+            // IMPORTANT:
+            // Connect approved event to original host
+            userId: request.userId,
+
+            name: request.name,
+
+            category: request.category,
+
+            description: request.description,
+
+            date: request.date,
+
+            startTime: request.startTime,
+
+            endTime: request.endTime,
+
+            venue: request.venue,
+
+            city: request.city,
+
+            address: request.address,
+
+            location: request.city,
+
+            price: Number(request.ticketPrice),
+
+            totalSeats: Number(request.totalSeats),
+
+            image: request.image,
+
+            organizerName: request.organizerName,
+
+            email: request.email,
+
+            phone: request.phone,
+
+            status: "Approved"
+
+        });
+
 
         await event.save();
+
 
         request.status = "Approved";
 
         await request.save();
 
+
         res.json({
 
-            success:true,
+            success: true,
 
-            message:"Event Approved"
+            message: "Event Approved"
 
         });
 
     }
 
-    catch(error){
+    catch(error) {
 
-        res.json({
+        console.log(
+            "Approval Error:",
+            error
+        );
 
-            success:false,
+        res.status(500).json({
 
-            message:"Approval Failed"
+            success: false,
+
+            message: "Approval Failed"
 
         });
 
@@ -243,39 +356,49 @@ router.put("/approve/:id", async(req,res)=>{
 // Reject Request
 // ===============================
 
-router.put("/reject/:id", async(req,res)=>{
+router.put("/reject/:id", async(req, res) => {
 
-    try{
+    try {
 
-        await EventRequest.findByIdAndUpdate(
+        const request =
+            await EventRequest.findById(req.params.id);
 
-            req.params.id,
+        if(!request) {
 
-            {
+            return res.json({
 
-                status:"Rejected"
+                success: false,
 
-            }
+                message: "Request Not Found"
 
-        );
+            });
+
+        }
+
+        request.status = "Rejected";
+
+        await request.save();
+
 
         res.json({
 
-            success:true,
+            success: true,
 
-            message:"Request Rejected"
+            message: "Request Rejected"
 
         });
 
     }
 
-    catch(error){
+    catch(error) {
 
-        res.json({
+        console.log(error);
 
-            success:false,
+        res.status(500).json({
 
-            message:"Unable to Reject"
+            success: false,
+
+            message: "Unable to Reject"
 
         });
 
@@ -288,34 +411,39 @@ router.put("/reject/:id", async(req,res)=>{
 // Delete Request
 // ===============================
 
-router.delete("/delete/:id", async(req,res)=>{
+router.delete("/delete/:id", async(req, res) => {
 
-    try{
+    try {
 
-        await EventRequest.findByIdAndDelete(req.params.id);
+        await EventRequest.findByIdAndDelete(
+            req.params.id
+        );
 
         res.json({
 
-            success:true,
+            success: true,
 
-            message:"Deleted Successfully"
+            message: "Deleted Successfully"
 
         });
 
     }
 
-    catch(error){
+    catch(error) {
 
-        res.json({
+        console.log(error);
 
-            success:false,
+        res.status(500).json({
 
-            message:"Delete Failed"
+            success: false,
+
+            message: "Delete Failed"
 
         });
 
     }
 
 });
+
 
 module.exports = router;

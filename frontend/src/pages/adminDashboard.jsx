@@ -2915,30 +2915,8 @@ function EventCard({
                             </button>
                         )}
 
-                        {openEdit && (
-                            <button
-                                onClick={() =>
-                                    openEdit(
-                                        event
-                                    )
-                                }
-                            >
-                                Edit
-                            </button>
-                        )}
 
-                        {remove && (
-                            <button
-                                className="danger-text"
-                                onClick={() =>
-                                    remove(
-                                        event._id
-                                    )
-                                }
-                            >
-                                Delete
-                            </button>
-                        )}
+                        
 
                     </div>
 
@@ -4117,10 +4095,6 @@ function EventDetailsModal({
     edit,
     remove
 }) {
-    const [
-        showSeats,
-        setShowSeats
-    ] = useState(false);
 
     const eventBookings =
         bookings.filter(
@@ -4149,10 +4123,6 @@ function EventDetailsModal({
         event.totalSeats || 0
     );
 
-    const available = Math.max(
-        totalSeats - soldTickets,
-        0
-    );
 
     const revenue =
         eventBookings.reduce(
@@ -4284,12 +4254,6 @@ function EventDetailsModal({
                         }
                     />
 
-                    <DetailStat
-                        label="Available Seats"
-                        value={
-                            available
-                        }
-                    />
 
                     <DetailStat
                         label="Revenue"
@@ -4299,76 +4263,6 @@ function EventDetailsModal({
                     />
 
                 </div>
-
-                <button
-                    className="seat-toggle"
-                    onClick={() =>
-                        setShowSeats(
-                            value =>
-                                !value
-                        )
-                    }
-                >
-                    <span>
-                        <strong>
-                            Available Seats
-                        </strong>
-
-                        <small>
-                            {available} seats
-                            currently available
-                        </small>
-                    </span>
-
-                    <b>
-                        {showSeats
-                            ? "Hide"
-                            : "View Seats"}{" "}
-                        →
-                    </b>
-                </button>
-
-                {showSeats && (
-                    <div className="seat-section">
-
-                        <h3>
-                            Available /
-                            Unbooked Seats
-                        </h3>
-
-                        {totalSeats ? (
-                            <div className="seat-grid">
-                                {Array.from(
-                                    {
-                                        length:
-                                            Math.min(
-                                                available,
-                                                200
-                                            )
-                                    },
-                                    (_, index) => (
-                                        <span
-                                            key={
-                                                index
-                                            }
-                                        >
-                                            Seat{" "}
-                                            {index +
-                                                1}
-                                        </span>
-                                    )
-                                )}
-                            </div>
-                        ) : (
-                            <p>
-                                Seat capacity has
-                                not been provided
-                                for this event.
-                            </p>
-                        )}
-
-                    </div>
-                )}
 
                 <div className="modal-actions">
 

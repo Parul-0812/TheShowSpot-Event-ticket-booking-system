@@ -2,7 +2,20 @@ const mongoose = require("mongoose");
 
 const eventRequestSchema = new mongoose.Schema({
 
+    // ===============================
+    // Host / User
+    // ===============================
+
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+
+    // ===============================
     // Event Information
+    // ===============================
+
     name: {
         type: String,
         required: true
@@ -18,7 +31,10 @@ const eventRequestSchema = new mongoose.Schema({
         required: true
     },
 
+    // ===============================
     // Date & Time
+    // ===============================
+
     date: {
         type: String,
         required: true
@@ -34,7 +50,10 @@ const eventRequestSchema = new mongoose.Schema({
         required: true
     },
 
+    // ===============================
     // Venue Details
+    // ===============================
+
     venue: {
         type: String,
         required: true
@@ -50,7 +69,10 @@ const eventRequestSchema = new mongoose.Schema({
         required: true
     },
 
+    // ===============================
     // Ticket Details
+    // ===============================
+
     ticketPrice: {
         type: Number,
         required: true
@@ -61,7 +83,10 @@ const eventRequestSchema = new mongoose.Schema({
         required: true
     },
 
+    // ===============================
     // Organizer Details
+    // ===============================
+
     organizerName: {
         type: String,
         required: true
@@ -77,21 +102,26 @@ const eventRequestSchema = new mongoose.Schema({
         required: true
     },
 
+    // ===============================
     // Event Poster
+    // ===============================
+
     image: {
         type: String,
         default: ""
     },
 
+    // ===============================
     // Request Status
+    // ===============================
+
     status: {
         type: String,
         enum: ["Pending", "Approved", "Rejected"],
         default: "Pending"
     }
 
-},
-{
+}, {
     timestamps: true
 });
 

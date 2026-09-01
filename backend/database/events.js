@@ -2,7 +2,20 @@ const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema({
 
+    // ===============================
+    // Host / User
+    // ===============================
+
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: false
+    },
+
+    // ===============================
     // Event Information
+    // ===============================
+
     name: {
         type: String,
         required: true
@@ -17,7 +30,10 @@ const eventSchema = new mongoose.Schema({
         type: String
     },
 
+    // ===============================
     // Date & Time
+    // ===============================
+
     date: {
         type: String,
         required: true
@@ -31,7 +47,10 @@ const eventSchema = new mongoose.Schema({
         type: String
     },
 
+    // ===============================
     // Venue
+    // ===============================
+
     venue: {
         type: String
     },
@@ -44,12 +63,14 @@ const eventSchema = new mongoose.Schema({
         type: String
     },
 
-    // Keeping this for compatibility with your existing code
     location: {
         type: String
     },
 
+    // ===============================
     // Ticket Details
+    // ===============================
+
     price: {
         type: Number,
         required: true
@@ -59,12 +80,18 @@ const eventSchema = new mongoose.Schema({
         type: Number
     },
 
+    // ===============================
     // Event Poster
+    // ===============================
+
     image: {
         type: String
     },
 
+    // ===============================
     // Organizer Details
+    // ===============================
+
     organizerName: {
         type: String
     },
@@ -77,7 +104,10 @@ const eventSchema = new mongoose.Schema({
         type: String
     },
 
+    // ===============================
     // Approval Status
+    // ===============================
+
     status: {
         type: String,
         enum: ["Pending", "Approved", "Rejected"],
