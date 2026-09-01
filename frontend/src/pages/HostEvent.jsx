@@ -372,7 +372,7 @@ function HostEvent() {
                             </option>
 
                             <option>
-                                Concert
+                                Concerts
                             </option>
 
                             <option>
