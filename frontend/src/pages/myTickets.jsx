@@ -24,7 +24,7 @@ const getTickets=async()=>{
 try{
 
 const result=await axios.get(
-`http://localhost:5000/booking/user/${user._id}`
+`https://theshowspot-backend.onrender.com/booking/user/${user._id}`
 );
 
 if(result.data.success){

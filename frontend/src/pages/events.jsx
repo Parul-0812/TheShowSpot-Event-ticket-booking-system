@@ -25,7 +25,7 @@ function Events() {
             try {
 
                 const result = await axios.get(
-                    "http://localhost:5000/events/all"
+                    "https://theshowspot-backend.onrender.com/events/all"
                 );
 
                 setEvents(result.data.data || []);
@@ -116,7 +116,7 @@ function Events() {
         // Already an uploads path
         if (image.startsWith("/uploads/")) {
 
-            return `http://localhost:5000${image}`;
+            return `https://theshowspot-backend.onrender.com${image}`;
 
         }
 
@@ -124,14 +124,14 @@ function Events() {
         // "uploads/filename.jpg"
         if (image.startsWith("uploads/")) {
 
-            return `http://localhost:5000/${image}`;
+            return `https://theshowspot-backend.onrender.com/${image}`;
 
         }
 
 
         // Filename only
         // This is what HostEvent currently stores
-        return `http://localhost:5000/uploads/${image}`;
+        return `https://theshowspot-backend.onrender.com/uploads/${image}`;
 
     };
 

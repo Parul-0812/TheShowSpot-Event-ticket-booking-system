@@ -26,7 +26,7 @@ function AdminLogin(){
             setLoading(true);
 
             const response=await fetch(
-                "http://localhost:5000/admin/login",
+                "https://theshowspot-backend.onrender.com/admin/login",
                 {
                     method:"POST",
                     headers:{

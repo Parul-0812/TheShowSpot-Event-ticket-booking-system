@@ -24,7 +24,7 @@ return;
 
 try{
 const result=await axios.post(
-"http://localhost:5000/user/register",
+"https://theshowspot-backend.onrender.com/user/register",
 {
 name,
 email,

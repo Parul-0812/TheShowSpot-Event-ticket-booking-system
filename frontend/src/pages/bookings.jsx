@@ -37,7 +37,7 @@ useEffect(()=>{
 if(!event)return;
 const getBookedSeats=async()=>{
 try{
-const result=await axios.post("http://localhost:5000/booking/bookedSeats",{eventName:event.name});
+const result=await axios.post("https://theshowspot-backend.onrender.com/booking/bookedSeats",{eventName:event.name});
 setBookedSeats(result.data.bookedSeats||[]);
 }catch(error){
 console.log(error);

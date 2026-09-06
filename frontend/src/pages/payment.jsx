@@ -66,7 +66,7 @@ throw new Error("Please login before making a payment.");
 if(!user._id){
 throw new Error("User information is incomplete. Please login again.");
 }
-const result=await axios.post("http://localhost:5000/payment/create-razorpay-order",{
+const result=await axios.post("https://theshowspot-backend.onrender.com/payment/create-razorpay-order",{
 amount:totalAmount,
 customerId:user._id,
 customerName:user.name||"TheShowSpot Customer",
@@ -133,7 +133,7 @@ const verifyPayment=async(response,razorpayOrderId)=>{
 try{
 setStep("processing");
 setPaymentStatus("Verifying your payment securely...");
-const result=await axios.post("http://localhost:5000/payment/verify-razorpay-payment",{
+const result=await axios.post("https://theshowspot-backend.onrender.com/payment/verify-razorpay-payment",{
 razorpay_payment_id:response.razorpay_payment_id,
 razorpay_order_id:razorpayOrderId,
 razorpay_signature:response.razorpay_signature
