@@ -3,7 +3,7 @@ import {useLocation,useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../styles/payment.css";
 import Navbar from "../components/navbar";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 
 function Payment(){
 const location=useLocation();

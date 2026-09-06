@@ -1,7 +1,7 @@
 import "../styles/homepage.css";
 import { Link, useNavigate } from "react-router-dom";
 import React,{useState} from "react";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 // import Navbar from "../components/navbar";
 
 function homepage(){
