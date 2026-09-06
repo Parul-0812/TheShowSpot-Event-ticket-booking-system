@@ -136,7 +136,7 @@ Prevent duplicate entries using ticket verification.
 </div>
 <div className="feature-card">
 
-<div className="icon">📊</div>
+<div className="icon">👤</div>
 
 <h3>User Dashboard</h3>
 
