@@ -134,6 +134,19 @@ Prevent duplicate entries using ticket verification.
 </p>
 
 </div>
+<div className="feature-card">
+
+<div className="icon">📊</div>
+
+<h3>User Dashboard</h3>
+
+<p>
+
+Manage your events, tickets and preferences in one place.
+
+</p>
+
+</div>
 
 <div className="feature-card">
 
