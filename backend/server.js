@@ -1,5 +1,8 @@
 require("dotenv").config();
 
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 const express=require("express");
 const mongoose=require("mongoose");
 const cors=require("cors");
@@ -33,7 +36,8 @@ app.use("/event-request",eventRequestApi);
 app.use("/payment",paymentRoutes);
 app.use("/admin",adminApi);
 
-mongoose.connect("mongodb://127.0.0.1:27017/TheShowSpot")
+// mongoose.connect("mongodb://127.0.0.1:27017/TheShowSpot")
+mongoose.connect(process.env.MONGO_URI)
 .then(()=>{
     console.log("MongoDB Connected");
 })
@@ -41,10 +45,16 @@ mongoose.connect("mongodb://127.0.0.1:27017/TheShowSpot")
     console.log("MongoDB Connection Error:",error);
 });
 
+
 app.get("/",(req,res)=>{
     res.send("TheShowSpot Backend Running");
 });
 
-app.listen(5000,()=>{
-    console.log("Server started on port 5000");
+// app.listen(5000,()=>{
+//     console.log("Server started on port 5000");
+// });
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on ${PORT}`);
 });
