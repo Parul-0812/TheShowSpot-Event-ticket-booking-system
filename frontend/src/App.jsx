@@ -12,7 +12,7 @@ import Payment from "./pages/payment";
 import AdminLogin from "./pages/adminLogin";
 import AdminDashboard from "./pages/adminDashboard";
 import HostEvent from "./pages/HostEvent";
-import Features from "./pages/Features";
+import Features from "./pages/features";
 import Organizer from "./pages/Organizer";
 import UserDashboard from "./pages/userDashboard";
 import MyTickets from "./pages/myTickets";
