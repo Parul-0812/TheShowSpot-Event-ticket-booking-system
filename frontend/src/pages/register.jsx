@@ -24,7 +24,7 @@ return;
 
 try{
 const result=await axios.post(
-"https://theshowspot-backend.onrender.com/user/register",
+"https://Entrivelle-backend.onrender.com/user/register",
 {
 name,
 email,
@@ -48,7 +48,7 @@ alert("Something went wrong");
 return(
 <div className="auth-container">
 <div className="auth-box">
-<h1>🎟️ TheShowSpot</h1>
+<h1>🎟️ Entrivelle</h1>
 <h2>Create Account</h2>
 <form onSubmit={registerUser}>
 <input

@@ -232,7 +232,7 @@ function HostEvent() {
 
             const response = await axios.post(
 
-                "https://theshowspot-backend.onrender.com/event-request/submit",
+                "https://Entrivelle-backend.onrender.com/event-request/submit",
 
                 formData,
 
@@ -319,7 +319,7 @@ function HostEvent() {
                     <p>
                         Bring your ideas to life and
                         reach thousands of attendees
-                        through TheShowSpot.
+                        through Entrivelle.
                     </p>
 
                 </div>
@@ -688,7 +688,7 @@ function HostEvent() {
                         <p>
                             Thank you for choosing
                             <strong>
-                                {" "}TheShowSpot
+                                {" "}Entrivelle
                             </strong>.
                         </p>
 

@@ -25,7 +25,7 @@ function Events() {
             try {
 
                 const result = await axios.get(
-                    "https://theshowspot-backend.onrender.com/events/all"
+                    "https://Entrivelle-backend.onrender.com/events/all"
                 );
 
                 setEvents(result.data.data || []);
@@ -116,7 +116,7 @@ function Events() {
         // Already an uploads path
         if (image.startsWith("/uploads/")) {
 
-            return `https://theshowspot-backend.onrender.com${image}`;
+            return `https://Entrivelle-backend.onrender.com${image}`;
 
         }
 
@@ -124,14 +124,14 @@ function Events() {
         // "uploads/filename.jpg"
         if (image.startsWith("uploads/")) {
 
-            return `https://theshowspot-backend.onrender.com/${image}`;
+            return `https://Entrivelle-backend.onrender.com/${image}`;
 
         }
 
 
         // Filename only
         // This is what HostEvent currently stores
-        return `https://theshowspot-backend.onrender.com/uploads/${image}`;
+        return `https://Entrivelle-backend.onrender.com/uploads/${image}`;
 
     };
 
@@ -660,7 +660,7 @@ function Events() {
                     <div className="footer-about">
 
                         <h2>
-                            🎟️ TheShowSpot
+                            🎟️ Entrivelle
                         </h2>
 
                         <p>
@@ -727,7 +727,7 @@ function Events() {
 
                 <p className="copyright">
 
-                    © 2026 TheShowSpot | All Rights Reserved
+                    © 2026 Entrivelle | All Rights Reserved
 
                 </p>
 

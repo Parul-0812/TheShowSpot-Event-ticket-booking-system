@@ -29,7 +29,7 @@ showCity &&
 
 <div className="city-popup">
         <div className="city-box">
-            <h1>Welcome to TheShowSpot 🎟️</h1>
+            <h1>Welcome to Entrivelle 🎟️</h1>
             <p>Select your city to discover amazing events near you</p>
 
 
@@ -107,7 +107,7 @@ setShowCity(false);
 <nav className="navbar">
 
 <Link to="/" className="logo">
-🎟️ TheShowSpot
+🎟️ Entrivelle
 </Link>
 
 <div className="nav-right">
@@ -492,7 +492,7 @@ Book Now
 <section className="steps-section">
 
 
-    <h2>How TheShowSpot Works</h2>
+    <h2>How Entrivelle Works</h2>
 
 
 
@@ -589,7 +589,7 @@ Book Now
 
 
 <h2>
-About TheShowSpot
+About Entrivelle
 </h2>
 
 
@@ -601,7 +601,7 @@ Your gateway to unforgettable experiences
 <p>
 
 From exciting concerts and movies to sports events and learning workshops,
-TheShowSpot helps users discover events, reserve seats and enjoy a smooth
+Entrivelle helps users discover events, reserve seats and enjoy a smooth
 digital booking experience with secure QR based tickets.
 
 </p>
@@ -631,7 +631,7 @@ digital booking experience with secure QR based tickets.
 
 <div className="contact">
 
-<span>📧 support@theshowspot.com</span>
+<span>📧 support@Entrivelle.com</span>
 
 <span>📞 +91 98765 432XX</span>
 

@@ -7,7 +7,7 @@ import React, {
 
 import "../styles/adminDashboard.css";
 
-const API = "https://theshowspot-backend.onrender.com";
+const API = "https://Entrivelle-backend.onrender.com";
 
 const EMPTY_EVENT = {
     name: "",
@@ -1350,7 +1350,7 @@ function AdminDashboard() {
             <div className="admin-loading">
                 <div className="admin-spinner" />
                 <h2>
-                    Loading TheShowSpot
+                    Loading Entrivelle
                 </h2>
                 <p>
                     Preparing the admin
@@ -1367,7 +1367,7 @@ function AdminDashboard() {
 
                 <div className="sidebar-brand">
                     <strong>
-                        🎟️ TheShowSpot
+                        🎟️ Entrivelle
                     </strong>
                     <span>
                         Admin Dashboard
@@ -1433,7 +1433,7 @@ function AdminDashboard() {
 
                     <div className="top-header-brand">
                         <strong>
-                            🎟️ TheShowSpot
+                            🎟️ Entrivelle
                         </strong>
 
                         <span>
@@ -1866,7 +1866,7 @@ function DashboardPage({
 
                     <p>
                         Here's what's happening
-                        across TheShowSpot today.
+                        across Entrivelle today.
                     </p>
                 </div>
 
@@ -1939,7 +1939,7 @@ function DashboardPage({
                     </span>
 
                     <h3>
-                        Manage TheShowSpot
+                        Manage Entrivelle
                     </h3>
                 </div>
 
@@ -2417,7 +2417,7 @@ function DashboardPage({
 
                 <SectionTitle
                     eyebrow="RECENT ACTIVITY"
-                    title="What's happening across TheShowSpot"
+                    title="What's happening across Entrivelle"
                     subtitle="Latest bookings, payments, requests and user activity."
                 />
 
@@ -2558,7 +2558,7 @@ function EventsPage({
                     <p>
                         Browse, create and manage
                         approved events on
-                        TheShowSpot.
+                        Entrivelle.
                     </p>
                 </div>
 
@@ -3312,7 +3312,7 @@ function UsersPage({
             <PageHeading
                 eyebrow="ACCOUNT MANAGEMENT"
                 title="Users"
-                description="Search accounts and control access to TheShowSpot."
+                description="Search accounts and control access to Entrivelle."
             />
 
             <div className="filter-panel">
@@ -3480,7 +3480,7 @@ function PaymentsPage({
             <PageHeading
                 eyebrow="PAYMENT CENTER"
                 title="Payments"
-                description="Monitor payment transactions and revenue from TheShowSpot."
+                description="Monitor payment transactions and revenue from Entrivelle."
             />
 
             <div className="payment-stats">

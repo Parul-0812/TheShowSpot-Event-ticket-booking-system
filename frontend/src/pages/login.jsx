@@ -18,7 +18,7 @@ const loginUser=async(e)=>{
 e.preventDefault();
 
 if(loginType==="admin"){
-if(email==="admin@theshowspot.com"&&password==="admin123"){
+if(email==="admin@Entrivelle.com"&&password==="admin123"){
 alert("Admin Login Successful");
 navigate("/admin");
 }else{
@@ -29,7 +29,7 @@ return;
 
 try{
 const result=await axios.post(
-"https://theshowspot-backend.onrender.com/user/login",
+"https://Entrivelle-backend.onrender.com/user/login",
 {
 email,
 password
@@ -59,7 +59,7 @@ alert("Something went wrong");
 return(
 <div className="auth-container">
 <div className="auth-box">
-<h1>🎟️ TheShowSpot</h1>
+<h1>🎟️ Entrivelle</h1>
 <h2>{loginType==="user"?"Welcome Back":"Administrator Login"}</h2>
 <div className="login-type">
 <button

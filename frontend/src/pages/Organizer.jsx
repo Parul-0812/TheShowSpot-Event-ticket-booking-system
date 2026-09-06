@@ -33,7 +33,7 @@ Host Your Event
 <p>
 
 Turn your ideas into unforgettable experiences with
-TheShowSpot.
+Entrivelle.
 
 Whether it's a concert, comedy show, workshop,
 college fest or sports event, we help you reach
@@ -77,7 +77,7 @@ Explore Events
 
 <h2>
 
-Why Host With TheShowSpot?
+Why Host With Entrivelle?
 
 </h2>
 
@@ -311,7 +311,7 @@ Everything You Need To Host Successful Events
 <p>
 
 From publishing your event to managing bookings,
-TheShowSpot provides everything required to make your
+Entrivelle provides everything required to make your
 event a success.
 
 </p>
@@ -415,7 +415,7 @@ Do I need to pay to host an event?
 
 <p>
 
-No. Hosting your event on TheShowSpot is completely free.
+No. Hosting your event on Entrivelle is completely free.
 
 </p>
 
@@ -457,7 +457,7 @@ Ready to Create Something Amazing?
 <p>
 
 Join hundreds of organizers who trust
-TheShowSpot for creating unforgettable
+Entrivelle for creating unforgettable
 experiences.
 
 </p>
@@ -503,7 +503,7 @@ Our support team is always happy to help.
 
 <div>
 
-📧 support@theshowspot.com
+📧 support@Entrivelle.com
 
 </div>
 

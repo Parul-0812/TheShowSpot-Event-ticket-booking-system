@@ -25,12 +25,12 @@ if(image.startsWith("images/")){
 return `/${image}`;
 }
 if(image.startsWith("/uploads/")){
-return `https://theshowspot-backend.onrender.com${image}`;
+return `https://Entrivelle-backend.onrender.com${image}`;
 }
 if(image.startsWith("uploads/")){
-return `https://theshowspot-backend.onrender.com/${image}`;
+return `https://Entrivelle-backend.onrender.com/${image}`;
 }
-return `https://theshowspot-backend.onrender.com/uploads/${image}`;
+return `https://Entrivelle-backend.onrender.com/uploads/${image}`;
 };
 
 const getEventTime=(event)=>{
@@ -91,7 +91,7 @@ if(!event)return;
 
 const getBookedSeats=async()=>{
 try{
-const result=await axios.post("https://theshowspot-backend.onrender.com/booking/bookedSeats",{eventName:event.name});
+const result=await axios.post("https://Entrivelle-backend.onrender.com/booking/bookedSeats",{eventName:event.name});
 setBookedSeats(result.data.bookedSeats||[]);
 }catch(error){
 console.log(error);

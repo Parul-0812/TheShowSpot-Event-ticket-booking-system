@@ -71,7 +71,7 @@ const updateProfile = async()=>{
 
         const result = await axios.put(
 
-            `https://theshowspot-backend.onrender.com/user/update-profile/${storedUser._id}`,
+            `https://Entrivelle-backend.onrender.com/user/update-profile/${storedUser._id}`,
 
             {
                 name,
@@ -150,7 +150,7 @@ const changePassword = async()=>{
 
         const result = await axios.put(
 
-            `https://theshowspot-backend.onrender.com/user/change-password/${storedUser._id}`,
+            `https://Entrivelle-backend.onrender.com/user/change-password/${storedUser._id}`,
 
             {
                 currentPassword,
@@ -567,7 +567,7 @@ disabled={changingPassword}
 <h2>🚪 Session</h2>
 
 <p>
-Sign out of your TheShowSpot account on this device.
+Sign out of your Entrivelle account on this device.
 </p>
 
 <button

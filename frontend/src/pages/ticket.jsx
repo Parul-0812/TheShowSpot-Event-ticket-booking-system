@@ -39,7 +39,7 @@ return(
 </div>
 
 <div className="ticket-header">
-<h2>🎟️ TheShowSpot</h2>
+<h2>🎟️ Entrivelle</h2>
 <span>ENTRY TICKET</span>
 </div>
 
@@ -87,7 +87,7 @@ return(
 </div>
 
 <p className="message">
-Thank you for booking with TheShowSpot ✨
+Thank you for booking with Entrivelle ✨
 </p>
 
 <Link to="/">

@@ -26,7 +26,7 @@ function AdminLogin(){
             setLoading(true);
 
             const response=await fetch(
-                "https://theshowspot-backend.onrender.com/admin/login",
+                "https://Entrivelle-backend.onrender.com/admin/login",
                 {
                     method:"POST",
                     headers:{
@@ -81,7 +81,7 @@ function AdminLogin(){
                 <h1>Admin Login</h1>
 
                 <p>
-                    Sign in to manage TheShowSpot
+                    Sign in to manage Entrivelle
                 </p>
 
                 <form onSubmit={loginAdmin}>

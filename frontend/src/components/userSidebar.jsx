@@ -19,7 +19,7 @@ return(
 className="user-logo"
 onClick={()=>navigate("/")}
 >
-🎟️ TheShowSpot
+🎟️ Entrivelle
 </button>
 
 <nav>

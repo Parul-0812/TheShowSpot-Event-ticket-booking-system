@@ -15,7 +15,7 @@ function Footer() {
         <div className="footer-about">
 
 
-            <h2>🎟️ TheShowSpot</h2>
+            <h2>🎟️ Entrivelle</h2>
 
 
             <p>
@@ -91,7 +91,7 @@ function Footer() {
 
     <p className="copyright">
 
-        © 2026 TheShowSpot | All Rights Reserved
+        © 2026 Entrivelle | All Rights Reserved
 
     </p>
 

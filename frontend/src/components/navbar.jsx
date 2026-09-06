@@ -26,7 +26,7 @@ return(
 <div className="nav-left">
 
 <Link to="/" className="logo">
-🎟️ TheShowSpot
+🎟️ Entrivelle
 </Link>
 
 </div>

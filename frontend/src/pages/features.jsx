@@ -18,7 +18,7 @@ return(
 
 <div className="features-hero">
 
-<h1>✨ Why Choose TheShowSpot?</h1>
+<h1>✨ Why Choose Entrivelle?</h1>
 
 <p>
 

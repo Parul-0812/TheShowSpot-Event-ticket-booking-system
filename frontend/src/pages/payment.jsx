@@ -66,10 +66,10 @@ throw new Error("Please login before making a payment.");
 if(!user._id){
 throw new Error("User information is incomplete. Please login again.");
 }
-const result=await axios.post("https://theshowspot-backend.onrender.com/payment/create-razorpay-order",{
+const result=await axios.post("https://Entrivelle-backend.onrender.com/payment/create-razorpay-order",{
 amount:totalAmount,
 customerId:user._id,
-customerName:user.name||"TheShowSpot Customer",
+customerName:user.name||"Entrivelle Customer",
 customerEmail:user.email,
 customerPhone:user.phone||"9999999999",
 eventName:booking.eventName,
@@ -87,7 +87,7 @@ const options={
 key:result.data.keyId,
 amount:result.data.amount,
 currency:result.data.currency,
-name:"TheShowSpot",
+name:"Entrivelle",
 description:`Ticket booking for ${booking.eventName}`,
 order_id:razorpayOrderId,
 prefill:{
@@ -133,7 +133,7 @@ const verifyPayment=async(response,razorpayOrderId)=>{
 try{
 setStep("processing");
 setPaymentStatus("Verifying your payment securely...");
-const result=await axios.post("https://theshowspot-backend.onrender.com/payment/verify-razorpay-payment",{
+const result=await axios.post("https://Entrivelle-backend.onrender.com/payment/verify-razorpay-payment",{
 razorpay_payment_id:response.razorpay_payment_id,
 razorpay_order_id:razorpayOrderId,
 razorpay_signature:response.razorpay_signature

@@ -24,7 +24,7 @@ const getTickets=async()=>{
 try{
 
 const result=await axios.get(
-`https://theshowspot-backend.onrender.com/booking/user/${user._id}`
+`https://Entrivelle-backend.onrender.com/booking/user/${user._id}`
 );
 
 if(result.data.success){

@@ -54,15 +54,15 @@ function EventDetails() {
 
     // Backend uploads
     if (image.startsWith("/uploads/")) {
-      return `https://theshowspot-backend.onrender.com${image}`;
+      return `https://Entrivelle-backend.onrender.com${image}`;
     }
 
     if (image.startsWith("uploads/")) {
-      return `https://theshowspot-backend.onrender.com/${image}`;
+      return `https://Entrivelle-backend.onrender.com/${image}`;
     }
 
     // Hosted event stores filename only
-    return `https://theshowspot-backend.onrender.com/uploads/${image}`;
+    return `https://Entrivelle-backend.onrender.com/uploads/${image}`;
   };
 
 
@@ -203,7 +203,7 @@ function EventDetails() {
 
             <p>
               {event.description ||
-                "Experience an amazing event with TheShowSpot. Enjoy unforgettable moments with your friends and family."
+                "Experience an amazing event with Entrivelle. Enjoy unforgettable moments with your friends and family."
               }
             </p>
 

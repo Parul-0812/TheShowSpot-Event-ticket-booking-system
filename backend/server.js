@@ -36,7 +36,7 @@ app.use("/event-request",eventRequestApi);
 app.use("/payment",paymentRoutes);
 app.use("/admin",adminApi);
 
-// mongoose.connect("mongodb://127.0.0.1:27017/TheShowSpot")
+// mongoose.connect("mongodb://127.0.0.1:27017/Entrivelle")
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{
     console.log("MongoDB Connected");
@@ -47,7 +47,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 app.get("/",(req,res)=>{
-    res.send("TheShowSpot Backend Running");
+    res.send("Entrivelle Backend Running");
 });
 
 // app.listen(5000,()=>{
