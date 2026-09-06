@@ -22,7 +22,7 @@ const getBookings=async()=>{
 try{
 
 const result=await axios.get(
-`https://Entrivelle-backend.onrender.com/booking/user/${user._id}`
+`https://theshowspot-backend.onrender.com/booking/user/${user._id}`
 );
 
 if(result.data.success){

@@ -7,7 +7,7 @@ import React, {
 
 import "../styles/adminDashboard.css";
 
-const API = "https://Entrivelle-backend.onrender.com";
+const API = "https://theshowspot-backend.onrender.com";
 
 const EMPTY_EVENT = {
     name: "",

@@ -54,7 +54,7 @@ const getBookings=async()=>{
 try{
 
 const result=await axios.get(
-"https://Entrivelle-backend.onrender.com/booking/all"
+"https://theshowspot-backend.onrender.com/booking/all"
 );
 
 setBookings(result.data.data);
@@ -74,7 +74,7 @@ const getRequests=async()=>{
 try{
 
 const result=await axios.get(
-"https://Entrivelle-backend.onrender.com/event-request/all"
+"https://theshowspot-backend.onrender.com/event-request/all"
 );
 
 setRequests(result.data.data);
@@ -93,7 +93,7 @@ const verifyTicket=async()=>{
 
 const result=await axios.post(
 
-"https://Entrivelle-backend.onrender.com/booking/verify",
+"https://theshowspot-backend.onrender.com/booking/verify",
 
 {
 
@@ -113,7 +113,7 @@ const approveRequest=async(id)=>{
 
 await axios.put(
 
-`https://Entrivelle-backend.onrender.com/event-request/approve/${id}`
+`https://theshowspot-backend.onrender.com/event-request/approve/${id}`
 
 );
 
@@ -125,7 +125,7 @@ const rejectRequest=async(id)=>{
 
 await axios.put(
 
-`https://Entrivelle-backend.onrender.com/event-request/reject/${id}`
+`https://theshowspot-backend.onrender.com/event-request/reject/${id}`
 
 );
 
@@ -207,7 +207,7 @@ requests.map((request)=>(
 <div className="request-card" key={request._id}>
 
 <img
-src={`https://Entrivelle-backend.onrender.com/uploads/${request.image}`}
+src={`https://theshowspot-backend.onrender.com/uploads/${request.image}`}
 alt={request.name}
 />
 
@@ -294,7 +294,7 @@ onClick={()=>setSelectedRequest(null)}
 </button>
 
 <img
-src={`https://Entrivelle-backend.onrender.com/uploads/${selectedRequest.image}`}
+src={`https://theshowspot-backend.onrender.com/uploads/${selectedRequest.image}`}
 alt={selectedRequest.name}
 />
 

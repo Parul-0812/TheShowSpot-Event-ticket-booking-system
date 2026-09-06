@@ -24,7 +24,7 @@ return;
 
 try{
 const result=await axios.post(
-"https://Entrivelle-backend.onrender.com/user/register",
+"https://theshowspot-backend.onrender.com/user/register",
 {
 name,
 email,

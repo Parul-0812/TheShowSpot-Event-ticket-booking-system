@@ -26,7 +26,7 @@ function AdminLogin(){
             setLoading(true);
 
             const response=await fetch(
-                "https://Entrivelle-backend.onrender.com/admin/login",
+                "https://theshowspot-backend.onrender.com/admin/login",
                 {
                     method:"POST",
                     headers:{

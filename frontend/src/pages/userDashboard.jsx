@@ -59,15 +59,15 @@ function UserDashboard() {
                 ] = await Promise.all([
 
                     axios.get(
-                        `https://Entrivelle-backend.onrender.com/booking/user/${user._id}`
+                        `https://theshowspot-backend.onrender.com/booking/user/${user._id}`
                     ),
 
                     axios.get(
-                        "https://Entrivelle-backend.onrender.com/events/all"
+                        "https://theshowspot-backend.onrender.com/events/all"
                     ),
 
                     axios.get(
-                        `https://Entrivelle-backend.onrender.com/event-request/user/${user._id}`
+                        `https://theshowspot-backend.onrender.com/event-request/user/${user._id}`
                     )
 
                 ]);
@@ -755,7 +755,7 @@ function UserDashboard() {
                                                 {request.image ? (
 
                                                     <img
-                                                        src={`https://Entrivelle-backend.onrender.com/uploads/${request.image}`}
+                                                        src={`https://theshowspot-backend.onrender.com/uploads/${request.image}`}
                                                         alt={request.name}
                                                     />
 
