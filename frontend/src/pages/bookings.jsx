@@ -10,9 +10,61 @@ const location=useLocation();
 const navigate=useNavigate();
 const user=JSON.parse(localStorage.getItem("user"));
 const event=location.state?.event;
+
+const getEventImage=(image)=>{
+if(!image){
+return "/images/event-placeholder.webp";
+}
+if(image.startsWith("http://")||image.startsWith("https://")){
+return image;
+}
+if(image.startsWith("/images/")){
+return image;
+}
+if(image.startsWith("images/")){
+return `/${image}`;
+}
+if(image.startsWith("/uploads/")){
+return `https://theshowspot-backend.onrender.com${image}`;
+}
+if(image.startsWith("uploads/")){
+return `https://theshowspot-backend.onrender.com/${image}`;
+}
+return `https://theshowspot-backend.onrender.com/uploads/${image}`;
+};
+
+const getEventTime=(event)=>{
+if(event.startTime){
+if(event.endTime){
+return `${event.startTime} - ${event.endTime}`;
+}
+return event.startTime;
+}
+if(event.time){
+return event.time;
+}
+if(event.eventTime){
+return event.eventTime;
+}
+return "Time not provided";
+};
+
+const getEventLocation=(event)=>{
+return event.location||event.city||"Location not provided";
+};
+
+const handleImageError=(e)=>{
+if(e.target.src.includes("event-placeholder.webp")){
+return;
+}
+e.target.onerror=null;
+e.target.src="/images/event-placeholder.webp";
+};
+
 const basePrice=event?Number(event.price):0;
 const [selectedSeats,setSelectedSeats]=useState([]);
 const [bookedSeats,setBookedSeats]=useState([]);
+
 const seats=[
 {id:"A1",type:"Premium",price:basePrice+200},
 {id:"A2",type:"Premium",price:basePrice+200},
@@ -33,8 +85,10 @@ const seats=[
 {id:"C5",type:"Silver",price:basePrice},
 {id:"C6",type:"Silver",price:basePrice}
 ];
+
 useEffect(()=>{
 if(!event)return;
+
 const getBookedSeats=async()=>{
 try{
 const result=await axios.post("https://theshowspot-backend.onrender.com/booking/bookedSeats",{eventName:event.name});
@@ -43,16 +97,20 @@ setBookedSeats(result.data.bookedSeats||[]);
 console.log(error);
 }
 };
+
 getBookedSeats();
 },[event]);
+
 const selectSeat=(seat)=>{
 if(bookedSeats.includes(seat.id))return;
+
 if(selectedSeats.includes(seat.id)){
 setSelectedSeats(selectedSeats.filter(item=>item!==seat.id));
 }else{
 setSelectedSeats([...selectedSeats,seat.id]);
 }
 };
+
 if(!event){
 return(
 <>
@@ -64,7 +122,11 @@ return(
 </>
 );
 }
-const total=seats.filter(seat=>selectedSeats.includes(seat.id)).reduce((sum,seat)=>sum+seat.price,0);
+
+const total=seats
+.filter(seat=>selectedSeats.includes(seat.id))
+.reduce((sum,seat)=>sum+seat.price,0);
+
 const confirmBooking=()=>{
 if(selectedSeats.length===0){
 alert("Please select at least one seat");
@@ -81,7 +143,7 @@ navigate("/payment",{
 state:{
 eventName:event.name,
 eventDate:event.date,
-eventLocation:event.location,
+eventLocation:getEventLocation(event),
 seats:selectedSeats,
 amount:total,
 user:user.name,
@@ -89,19 +151,29 @@ userId:user._id
 }
 });
 };
+
 return(
 <>
 <Navbar/>
 <div className="booking-container">
 <h1>🎟 Book Tickets</h1>
+
 <div className="booking-card">
-<img src={event.image} className="booking-img" alt={event.name}/>
+<img
+src={getEventImage(event.image)}
+className="booking-img"
+alt={event.name}
+onError={handleImageError}
+/>
+
 <h2>{event.name}</h2>
-<p>📍 {event.location}</p>
-<p>📅 {event.date}</p>
-<p>⏰ {event.time}</p>
+<p>📍 {getEventLocation(event)}</p>
+<p>📅 {event.date||"Date not provided"}</p>
+<p>⏰ {getEventTime(event)}</p>
 <h3>Starting From: ₹{basePrice}</h3>
+
 <h3>Select Seats</h3>
+
 <div className="seat-container">
 {seats.map(seat=>(
 <button
@@ -120,17 +192,23 @@ onClick={()=>selectSeat(seat)}
 </button>
 ))}
 </div>
+
 <div className="booking-summary">
-<p>Selected Seats: {selectedSeats.length>0?selectedSeats.join(", "):"None"}</p>
+<p>
+Selected Seats: {selectedSeats.length>0?selectedSeats.join(", "):"None"}
+</p>
 <h3>Total: ₹{total}</h3>
 </div>
+
 <button className="confirm-booking" onClick={confirmBooking}>
 Confirm Booking
 </button>
 </div>
 </div>
+
 <Footer/>
 </>
 );
 }
+
 export default Bookings;
