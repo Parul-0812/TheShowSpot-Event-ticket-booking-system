@@ -1,7 +1,7 @@
 import "../styles/auth.css";
 import axios from "axios";
 import React,{useState} from "react";
-import {useLocation,useNavigate} from "react-router-dom";
+import {useLocation,useNavigate,Link} from "react-router-dom";
 
 function Login(){
 
@@ -97,7 +97,7 @@ Login
 {loginType==="user"&&(
 <p>
 New user?
-<a href="/register"> Register</a>
+<Link to="/register"> Register</Link>
 </p>
 )}
 </div>
